@@ -1,3 +1,13 @@
+#### Set up SSH
+```
+mkdir .ssh
+touch .ssh/id_rsa
+touch .ssh/id_rsa.pub
+sudo chown 600 .ssh/id_rsa
+sudo chown 600 .ssh/id_rsa.pub
+```
+Populate with content from password manager
+
 #### Install [Oh My ZSH](https://ohmyz.sh/)
 
 ```
