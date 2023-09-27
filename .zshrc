@@ -102,8 +102,8 @@ source $ZSH/oh-my-zsh.sh
 # For a full list of active aliases, run `alias`.
 #
 # Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
+alias zshconf="kate ~/.zshrc"
+alias ohmyzsh="kate ~/.oh-my-zsh"
 
 ai() {
  chatgpt
@@ -115,4 +115,4 @@ prompt_context() {
   fi
 }
 
-alias config= '/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
+alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
