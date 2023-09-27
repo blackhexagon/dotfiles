@@ -37,6 +37,10 @@ Define the alias in the current shell scope:
 alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 ```
 
+We set a flag - local to the repository - to hide files we are not explicitly tracking yet. This is so that when you type config status and other commands later, files you are not interested in tracking will not show up as untracked.
+```
+config config --local status.showUntrackedFiles no
+```
 Checkout the actual content from the bare repository to your $HOME
 ```
 config checkout
