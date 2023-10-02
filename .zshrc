@@ -79,6 +79,12 @@ zsh-autosuggestions
 zsh-syntax-highlighting
 )
 
+# Load secret environment variables
+if [ -f ~/.env ]; then
+    source ~/.env
+fi
+
+
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
@@ -109,8 +115,15 @@ alias ohmyzsh="kate ~/.oh-my-zsh"
 alias sudo='sudo '
 alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 
+# aicommits
+aic() {
+  git add .
+  aicommits
+}
+
+# chatgpt
 ai() {
- chatgpt
+  chatgpt $1 | glow -
 }
 
 # Remove username & machine from the prompt
