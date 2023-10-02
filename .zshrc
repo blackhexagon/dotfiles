@@ -73,6 +73,8 @@ ZSH_THEME="agnoster"
 
 plugins=(
 git
+git-open
+docker-compose
 zsh-autosuggestions
 zsh-syntax-highlighting
 )
@@ -104,15 +106,16 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 alias zshconf="kate ~/.zshrc"
 alias ohmyzsh="kate ~/.oh-my-zsh"
+alias sudo='sudo '
+alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 
 ai() {
  chatgpt
 }
 
+# Remove username & machine from the prompt
 prompt_context() {
   if [[ "$USER" != "$DEFAULT_USER" || -n "$SSH_CLIENT" ]]; then
-    prompt_segment black default "%(!.%{%F{yellow}%}.)$USER"
+    #prompt_segment black default "%(!.%{%F{yellow}%}.)$USER"
   fi
 }
-
-alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
