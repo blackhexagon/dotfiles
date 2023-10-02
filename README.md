@@ -1,4 +1,4 @@
-#### Set up SSH
+## Set up SSH
 ```
 mkdir .ssh
 touch .ssh/id_rsa
@@ -8,17 +8,13 @@ sudo chown 600 .ssh/id_rsa.pub
 ```
 Populate with content from password manager
 
-#### Install [Oh My ZSH](https://ohmyz.sh/)
+## Tools
+
+
+## Install Oh My ZSH
 
 ```
 sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-```
-
-#### Instal ZSH plugins
-```
-git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
-git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-git clone https://github.com/paulirish/git-open.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/git-open
 ```
 
 #### Make zsh default if you haven't already:
@@ -26,7 +22,22 @@ git clone https://github.com/paulirish/git-open.git ${ZSH_CUSTOM:-~/.oh-my-zsh/c
 chsh -s $(which zsh)
 ```
 
-#### Sync dotfiles
+#### Instal ZSH plugins
+##### [zsh-syntax-highlighting](https://github.com/zsh-users/zsh-syntax-highlighting)
+```
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+```
+##### [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions/tree/master)
+```
+git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+```
+##### [git-open](https://github.com/paulirish/git-open)
+```
+git clone https://github.com/paulirish/git-open.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/git-open
+```
+
+
+## Sync dotfiles
 
 Make sure that your source repository ignores the folder where you'll clone it, so that you don't create weird recursion problems:
 ```
@@ -38,9 +49,9 @@ Clone the repo
 git clone --bare git@github.com:blackhexagon/dotfiles.git $HOME/.cfg
 ```
 
-Define the alias in the current shell scope:
+Restart the shell
 ```
-alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
+source .zshrc
 ```
 
 We set a flag - local to the repository - to hide files we are not explicitly tracking yet. This is so that when you type config status and other commands later, files you are not interested in tracking will not show up as untracked.
