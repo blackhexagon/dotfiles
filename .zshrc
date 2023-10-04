@@ -114,6 +114,7 @@ alias zshconf="kate ~/.zshrc"
 alias ohmyzsh="kate ~/.oh-my-zsh"
 alias sudo='sudo '
 alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
+alias update='bash ~/scripts/update.sh'
 
 # aicommits
 aic() {
@@ -123,7 +124,7 @@ aic() {
 
 # chatgpt
 ai() {
-  chatgpt $1 | glow -
+  chatgpt -c $1 | glow -
 }
 
 # Remove username & machine from the prompt
