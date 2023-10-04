@@ -1,6 +1,9 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
+# For AI chat without quotes
+setopt NO_NOMATCH
+
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 export EDITOR="phpstorm"
@@ -43,6 +46,7 @@ zstyle ':omz:update' frequency 7
 plugins=(
 git
 git-open
+web-search
 docker-compose
 zsh-autosuggestions
 zsh-syntax-highlighting
@@ -80,11 +84,15 @@ source $ZSH/oh-my-zsh.sh
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
 # For a full list of active aliases, run `alias`.
 
-alias zshconf="kate ~/.zshrc"
-alias ohmyzsh="kate ~/.oh-my-zsh"
+alias zshconf="micro ~/.zshrc"
+alias ohmyzsh="micro ~/.oh-my-zsh"
 alias sudo='sudo '
 alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 alias update='bash ~/scripts/update.sh'
+alias lzd='sudo lazydocker'
+alias ls='eza'
+alias ll='eza --long --header --git --icons'
+alias tree='ll --tree --level 4 -a -I=.git --git-ignore'
 
 aic() {
   git add .
@@ -92,7 +100,11 @@ aic() {
 }
 
 ai() {
-  chatgpt -m gpt-4 -c $1 | glow -
+  chatgpt -m gpt-4 -c "$*" | glow -
+}
+
+ggl() {
+  googler "$*"
 }
 
 # Remove username & machine from the prompt
@@ -101,3 +113,6 @@ prompt_context() {
     #prompt_segment black default "%(!.%{%F{yellow}%}.)$USER"
   fi
 }
+
+# enable zoxide
+eval "$(zoxide init zsh)"
