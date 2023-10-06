@@ -47,6 +47,7 @@ plugins=(
 git
 git-open
 web-search
+fzf
 docker-compose
 zsh-autosuggestions
 zsh-syntax-highlighting
@@ -91,8 +92,11 @@ alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 alias update='bash ~/scripts/update.sh'
 alias lzd='sudo lazydocker'
 alias ls='eza'
-alias ll='eza --long --header --git --icons'
-alias tree='ll --tree --level 4 -a -I=.git --git-ignore'
+alias ll='eza --long --header --git --icons --all --group-directories-first'
+alias tree='eza --header --git --icons --long --header --tree --level 4 -a --group-directories-first'
+alias treegnore='eza --header --git --icons --long --header --tree --level 4 -a --group-directories-first -I=.git --git-ignore'
+alias o='phpstorm $(rg --files | fzf) && clear'
+alias gdd="sh ~/scripts/goodday.sh"
 
 aic() {
   git add .
