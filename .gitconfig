@@ -10,4 +10,4 @@
 	defaultBranch = master
 [core]
 	editor = micro
-	excludesfile = /home/matous/.gitignore_global
+	excludesfile = ~/.gitignore_global
