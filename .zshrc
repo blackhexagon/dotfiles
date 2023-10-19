@@ -7,6 +7,7 @@ setopt NO_NOMATCH
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 export EDITOR="phpstorm"
+export DOCKER_HOST=unix://$XDG_RUNTIME_DIR/docker.sock
 
 # Theme
 ZSH_THEME="agnoster"
@@ -90,11 +91,11 @@ alias ohmyzsh="micro ~/.oh-my-zsh"
 alias sudo='sudo '
 alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 alias update='bash ~/scripts/update.sh'
-alias lzd='sudo lazydocker'
-alias ls='eza'
+alias lzd='lazydocker'
+#alias ls='eza'
 alias ll='eza --long --header --git --icons --all --group-directories-first'
-alias tree='eza --header --git --icons --long --header --tree --level 4 -a --group-directories-first'
-alias treegnore='eza --header --git --icons --long --header --tree --level 4 -a --group-directories-first -I=.git --git-ignore'
+alias tree='eza --header --git --icons --long --header --tree --level 2 -a --group-directories-first'
+alias treegnore='eza --header --git --icons --long --header --tree --level 2 -a --group-directories-first -I=.git --git-ignore'
 alias o='phpstorm $(rg --files | fzf) && clear'
 alias gdd="sh ~/scripts/goodday.sh"
 
@@ -109,6 +110,11 @@ ai() {
 
 ggl() {
   googler "$*"
+}
+
+fif() {
+  if [ ! "$#" -gt 0 ]; then echo "Need a string to search for!"; return 1; fi
+  rg --files-with-matches --no-messages "$1" | fzf --preview "highlight -O ansi -l {} 2> /dev/null | rg --colors 'match:bg:yellow' --ignore-case --pretty --context 10 '$1' || rg --ignore-case --pretty --context 10 '$1' {}" | xargs phpstorm
 }
 
 # Remove username & machine from the prompt
