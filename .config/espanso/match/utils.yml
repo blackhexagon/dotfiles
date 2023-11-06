@@ -1,0 +1,18 @@
+matches:
+- trigger: ":ip"
+  replace: "{{output}}"
+  vars:
+    - name: output
+      type: shell
+      params:
+        cmd: "curl 'https://api.ipify.org'"
+
+- triggers: [":weather", ":pocasi"]
+  replace: "{{output}}"
+  vars:
+    - name: output
+      type: shell
+      params:
+        cmd: "curl 'http://wttr.in/?format=3'"
+- trigger: :md-code
+  replace: "```\n$|$\n```"

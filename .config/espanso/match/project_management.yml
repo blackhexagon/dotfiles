@@ -1,0 +1,3 @@
+matches:
+  - trigger: ":dd"
+    replace: "Nasazuje se na dev. Přibližně za 5 minut to bude možné zkontrolovat"
