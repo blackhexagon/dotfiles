@@ -88,11 +88,9 @@ source $ZSH/oh-my-zsh.sh
 
 alias zshconf="micro ~/.zshrc"
 alias ohmyzsh="micro ~/.oh-my-zsh"
-alias sudo='sudo '
 alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 alias update='bash ~/scripts/update.sh'
 alias lzd='lazydocker'
-#alias ls='eza'
 alias ll='eza --long --header --git --icons --all --group-directories-first'
 alias tree='eza --header --git --icons --long --header --tree --level 2 -a --group-directories-first'
 alias treegnore='eza --header --git --icons --long --header --tree --level 2 -a --group-directories-first -I=.git --git-ignore'
@@ -106,7 +104,19 @@ aic() {
 }
 
 ai() {
-  chatgpt -m gpt-4-1106-preview -c "$*" | tee /tmp/chatgpt.md && clear && glow /tmp/chatgpt.md
+  dt=$(date +"%y-%m-%d_%H:%M:%S")
+  input="$*"
+  trim=${input:0:40}
+  file="$HOME/chatgpt/${dt}_${trim}.md"
+  chatgpt -m gpt-4-1106-preview -c $input | tee $file
+  clear
+  echo -e "> ${input}\n\n$(< ${file})" > $file
+  glow $file
+}
+
+aihist() {                                            
+  local file                                                              
+  file=$(ls -t $HOME/chatgpt/* | fzf) && glow "$file"
 }
 
 aiki() {
