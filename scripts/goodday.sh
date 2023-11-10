@@ -53,7 +53,7 @@ case $user_selection in
         ;;
 	"Detail")
         echo "Opening details..."
-        echo $task | fold -w 64
+        echo "$task" | fold -s -w 64
         echo "================================================================"
         messages=$(fetchMessagesWithUser "$taskId")
         length=$(echo "$messages" | jq '. | length')
@@ -65,7 +65,7 @@ case $user_selection in
             if [[ ! -z "$text" && "$text" != "null" ]]; then
               echo -e "${BOLD}$user${CLEAR}"
               echo -e "${UNDERLINE}$date${CLEAR}"
-              echo -e "$text" | fold -w 64
+              echo -e "$text" | fold -s -w 64
               echo "================================================================"
             fi
         done

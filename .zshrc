@@ -97,15 +97,27 @@ alias ll='eza --long --header --git --icons --all --group-directories-first'
 alias tree='eza --header --git --icons --long --header --tree --level 2 -a --group-directories-first'
 alias treegnore='eza --header --git --icons --long --header --tree --level 2 -a --group-directories-first -I=.git --git-ignore'
 alias o='phpstorm $(rg --files | fzf) && clear'
+alias storm='phpstorm $1 > void'
 alias gdd="sh ~/scripts/goodday.sh"
 
 aic() {
   git add .
-  aicommits
+  aicommits -g 3
 }
 
 ai() {
-  chatgpt -m gpt-4 -c "$*" | glow -
+  chatgpt -m gpt-4-1106-preview -c "$*" | tee /tmp/chatgpt.md && clear && glow /tmp/chatgpt.md
+}
+
+aiki() {
+  chatgpt -m gpt-4-1106-preview "I have have text separated by <<< and >>>.
+  Your task is to create flashcards for all the facts in the text. Try to be as granular as possible.
+  Front of the flashcard should be a question, and the back is the answer. The answer and the question should be concise, one short sentences idally. 
+  Use CSV as the output. First column is the question and second column is the answer. Just print the CSV and omit its head.
+  <<<
+  $*
+  >>>
+  " > anki_import.csv
 }
 
 ggl() {
