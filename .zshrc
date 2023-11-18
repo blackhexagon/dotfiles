@@ -108,7 +108,7 @@ ai() {
   input="$*"
   trim=${input:0:40}
   file="$HOME/chatgpt/${dt}_${trim}.md"
-  chatgpt -m gpt-4-1106-preview -c $input | tee $file
+  chatgpt -k $OPENAI_API_KEY -m gpt-4-1106-preview -c $input | tee $file
   clear
   echo -e "> ${input}\n\n$(< ${file})" > $file
   glow $file
