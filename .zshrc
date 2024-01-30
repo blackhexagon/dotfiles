@@ -91,12 +91,20 @@ alias ohmyzsh="micro ~/.oh-my-zsh"
 alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 alias update='bash ~/scripts/update.sh'
 alias lzd='lazydocker'
-alias ll='eza --long --header --git --icons --all --group-directories-first'
+alias ll='eza --long --header --git --icons --all --group-directories-first --time-style=relative'
 alias tree='eza --header --git --icons --long --header --tree --level 2 -a --group-directories-first'
 alias treegnore='eza --header --git --icons --long --header --tree --level 2 -a --group-directories-first -I=.git --git-ignore'
 alias o='phpstorm $(rg --files | fzf) && clear'
-alias storm='phpstorm $1 > void'
+alias storm='phpstorm $1'
 alias gdd="sh ~/scripts/goodday.sh"
+
+flac2mp3() {
+	find . -type f -name "*.flac" -exec sh -c 'ffmpeg -i "$0" -b:a 320k -map_metadata 0 -id3v2_version 3 "${0%.flac}.mp3" && rm "$0"' {} \;
+}
+
+ogg2mp3() {
+	find . -type f -name "*.ogg" -exec sh -c 'ffmpeg -i "$0" -b:a 320k -map_metadata 0 -id3v2_version 3 "${0%.ogg}.mp3" && rm "$0"' {} \;
+}
 
 aic() {
   git add .
@@ -138,6 +146,15 @@ fif() {
   if [ ! "$#" -gt 0 ]; then echo "Need a string to search for!"; return 1; fi
   rg --files-with-matches --no-messages "$1" | fzf --preview "highlight -O ansi -l {} 2> /dev/null | rg --colors 'match:bg:yellow' --ignore-case --pretty --context 10 '$1' || rg --ignore-case --pretty --context 10 '$1' {}" | xargs phpstorm
 }
+
+# Navigating to project root
+r () {
+    cd "$(git rev-parse --show-toplevel 2>/dev/null)"
+}
+
+editor() {                                                     
+    nohup phpstorm "$@" &>/dev/null &                              
+}  
 
 # Remove username & machine from the prompt
 prompt_context() {
