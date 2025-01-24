@@ -158,6 +158,32 @@ prompt_context() {
   fi
 }
 
+killport() {                                                                                             
+  # Prompt the user for the port number                                                                           
+  read -p "Enter the port number you want to kill: " port                                                         
+                                                                                                                  
+  # Find the process ID (PID) using `ss` and `awk`                                                                
+  pid=$(sudo ss -ltnp | grep ":$port" | awk '{for(i=1;i<=NF;i++) if($i ~ "pid=") print substr($i,5)}')            
+                                                                                                                  
+  # Check if we got a PID                                                                                         
+  if [ ! -z "$pid" ]; then                                                                                        
+    echo "Killing process with PID $pid on port $port"                                                            
+                                                                                                                  
+    # Attempt to kill the process gently with SIGTERM                                                             
+    sudo kill $pid                                                                                                
+                                                                                                                  
+    # If the process does not terminate after some time, force it to close                                        
+    if kill -0 $pid 2>/dev/null; then                                                                             
+      echo "Process did not terminate, forcing it to stop..."                                                     
+      sudo kill -9 $pid                                                                                           
+    fi                                                                                                            
+                                                                                                                  
+    echo "Process killed."                                                                                        
+  else                                                                                                            
+    echo "No process found running on port $port."                                                                
+  fi                                                                                                              
+}          
+
 # enable zoxide
 eval "$(zoxide init zsh)"
 
