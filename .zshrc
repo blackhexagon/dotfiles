@@ -1,6 +1,6 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
-
+export PATH="$PATH:/home/matous/.config/composer/vendor/bin"
 # For AI chat without quotes
 setopt NO_NOMATCH
 
@@ -64,6 +64,10 @@ export ZSH_COMPDUMP=$ZSH/cache/.zcompdump-$HOST
 
 source $ZSH/oh-my-zsh.sh
 
+#unalias
+unalias chatgpt
+
+
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -97,6 +101,8 @@ alias treegnore='eza --header --git --icons --long --header --tree --level 2 -a 
 alias o='phpstorm $(rg --files | fzf) && clear'
 alias storm='phpstorm $1'
 alias gdd="sh ~/scripts/goodday.sh"
+alias ccsv="xclip -o > ~/anki/clipboard.csv"
+alias scripts="cat package.json | jq --color-output '.scripts'"
 
 flac2mp3() {
 	find . -type f -name "*.flac" -exec sh -c 'ffmpeg -i "$0" -b:a 320k -map_metadata 0 -id3v2_version 3 "${0%.flac}.mp3" && rm "$0"' {} \;
@@ -116,7 +122,7 @@ ai() {
   input="$*"
   trim=${input:0:40}
   file="$HOME/chatgpt/${dt}_${trim}.md"
-  chatgpt -k $OPENAI_API_KEY -m gpt-4-1106-preview -c $input | tee $file
+  chatgpt -k $OPENAI_API_KEY -m gpt-4o -c $input | tee $file
   clear
   echo -e "> ${input}\n\n$(< ${file})" > $file
   glow $file
@@ -125,17 +131,6 @@ ai() {
 aihist() {                                            
   local file                                                              
   file=$(ls -t $HOME/chatgpt/* | fzf) && glow "$file"
-}
-
-aiki() {
-  chatgpt -m gpt-4-1106-preview "I have have text separated by <<< and >>>.
-  Your task is to create flashcards for all the facts in the text. Try to be as granular as possible.
-  Front of the flashcard should be a question, and the back is the answer. The answer and the question should be concise, one short sentences idally. 
-  Use CSV as the output. First column is the question and second column is the answer. Just print the CSV and omit its head.
-  <<<
-  $*
-  >>>
-  " > anki_import.csv
 }
 
 ggl() {
@@ -165,3 +160,7 @@ prompt_context() {
 
 # enable zoxide
 eval "$(zoxide init zsh)"
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
