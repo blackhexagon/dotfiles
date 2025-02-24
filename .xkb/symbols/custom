@@ -1,0 +1,25 @@
+partial alphanumeric_keys
+xkb_symbols "custom" {
+
+    include "us"
+    
+    key <AD03>  {[         e,          E,     ecaron,     Ecaron ]};
+    key <AD04>  {[         r,          R,     rcaron,     Rcaron ]};
+    key <AD05>  {[         t,          T,     tcaron,     Tcaron ]};
+    key <AD06>  {[         z,          Z,     zcaron,     Zcaron ]};
+    key <AD07>  {[         u,          U,     uacute,     Uacute ]};
+    key <AD08>  {[         i,          I,     iacute,     Iacute ]};
+    key <AD09>  {[         o,          O,     oacute,     Oacute ]};
+    
+    key <AC01>  {[         a,          A,     aacute,     Aacute ]};
+    key <AC02>  {[         s,          S,     scaron,     Scaron ]};
+    key <AC03>  {[         d,          D,     dcaron,     Dcaron ]};
+    key <AC04>  {[         f,          F,     eacute,     Eacute ]};
+    key <AC10>  {[ semicolon,      colon,      uring,      Uring ]};
+
+    key <AB01>  {[         y,          Y,     yacute,     Yacute ]};
+    key <AB03>  {[         c,          C,     ccaron,     Ccaron ]};
+    key <AB06>  {[         n,          N,     ncaron,     Ncaron ]};
+    
+    include "level3(ralt_switch)"
+};
