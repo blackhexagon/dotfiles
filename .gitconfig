@@ -9,7 +9,7 @@
 [init]
 	defaultBranch = master
 [core]
-	editor = micro
+	editor = nvim
 	excludesfile = ~/.gitignore_global
 	pager = delta
 [delta]
