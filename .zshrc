@@ -1,13 +1,18 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
-export PATH="$PATH:/home/matous/.config/composer/vendor/bin"
+export PATH="$PATH:/usr/bin"
 # For AI chat without quotes
 setopt NO_NOMATCH
 
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
-export EDITOR="phpstorm"
+export EDITOR="nvim"
 export DOCKER_HOST=unix://$XDG_RUNTIME_DIR/docker.sock
+export FZF_DEFAULT_OPTS=" \
+--color=bg+:#ccd0da,bg:#eff1f5,spinner:#dc8a78,hl:#d20f39 \
+--color=fg:#4c4f69,header:#d20f39,info:#8839ef,pointer:#dc8a78 \
+--color=marker:#7287fd,fg+:#4c4f69,prompt:#8839ef,hl+:#d20f39 \
+--color=border:#ccd0da,label:#4c4f69"
 
 # Theme
 ZSH_THEME="agnoster"
@@ -98,8 +103,6 @@ alias lzd='lazydocker'
 alias ll='eza --long --header --git --icons --all --group-directories-first --time-style=relative'
 alias tree='eza --header --git --icons --long --header --tree --level 2 -a --group-directories-first'
 alias treegnore='eza --header --git --icons --long --header --tree --level 2 -a --group-directories-first -I=.git --git-ignore'
-alias o='phpstorm $(rg --files | fzf) && clear'
-alias storm='phpstorm $1'
 alias gdd="sh ~/scripts/goodday.sh"
 alias ccsv="xclip -o > ~/anki/clipboard.csv"
 alias scripts="cat package.json | jq --color-output '.scripts'"
@@ -139,7 +142,7 @@ ggl() {
 
 fif() {
   if [ ! "$#" -gt 0 ]; then echo "Need a string to search for!"; return 1; fi
-  rg --files-with-matches --no-messages "$1" | fzf --preview "highlight -O ansi -l {} 2> /dev/null | rg --colors 'match:bg:yellow' --ignore-case --pretty --context 10 '$1' || rg --ignore-case --pretty --context 10 '$1' {}" | xargs phpstorm
+  rg --files-with-matches --no-messages "$1" | fzf --preview "highlight -O ansi -l {} 2> /dev/null | rg --colors 'match:bg:yellow' --ignore-case --pretty --context 10 '$1' || rg --ignore-case --pretty --context 10 '$1' {}" | xargs nvim
 }
 
 # Navigating to project root
@@ -147,14 +150,10 @@ r () {
     cd "$(git rev-parse --show-toplevel 2>/dev/null)"
 }
 
-editor() {                                                     
-    nohup phpstorm "$@" &>/dev/null &                              
-}  
-
 # Remove username & machine from the prompt
 prompt_context() {
   if [[ "$USER" != "$DEFAULT_USER" || -n "$SSH_CLIENT" ]]; then
-    #prompt_segment black default "%(!.%{%F{yellow}%}.)$USER"
+    # prompt_segment black default "%(!.%{%F{yellow}%}.)$USER"
   fi
 }
 
@@ -187,7 +186,7 @@ killport() {
 # enable zoxide
 eval "$(zoxide init zsh)"
 
-source /usr/share/nvm/init-nvm.sh
+# source /usr/share/nvm/init-nvm.sh
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
