@@ -16,19 +16,19 @@ npm outdated -g --depth=0
 # Prompt user to update packages
 read -p "Do you want to update all packages? (y/n): " choice
 if [ "$choice" == "y" ]; then
-    # Update pacman packages
-    echo "Updating pacman packages..."
-    sudo pacman -Syu
+  # Update pacman packages
+  echo "Updating pacman packages..."
+  sudo pacman -Syu
 
-    # Update snap packages
-    echo "Updating snap packages..."
-    sudo snap refresh
+  # Update snap packages
+  echo "Updating snap packages..."
+  sudo snap refresh
 
-    # Update npm global packages
-    echo "Updating npm global packages..."
-    sudo npm update -g
+  # Update npm global packages
+  echo "Updating npm global packages..."
+  sudo npm update -g
 
-    echo "All packages have been updated."
+  echo "All packages have been updated."
 else
-    echo "No packages were updated."
+  echo "No packages were updated."
 fi

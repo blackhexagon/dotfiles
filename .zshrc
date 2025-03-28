@@ -51,12 +51,16 @@ zstyle ':omz:update' frequency 7
 
 plugins=(
 git
+gh
+nvm
+npm
 git-open
 web-search
 fzf
 docker-compose
 zsh-autosuggestions
 zsh-syntax-highlighting
+tmux
 )
 
 # Load secret environment variables
@@ -106,6 +110,7 @@ alias treegnore='eza --header --git --icons --long --header --tree --level 2 -a 
 alias gdd="sh ~/scripts/goodday.sh"
 alias ccsv="xclip -o > ~/anki/clipboard.csv"
 alias scripts="cat package.json | jq --color-output '.scripts'"
+alias chrome='/mnt/c/Program\ Files/Google/Chrome/Application/chrome.exe --auto-open-devtools-for-tabs'
 
 flac2mp3() {
 	find . -type f -name "*.flac" -exec sh -c 'ffmpeg -i "$0" -b:a 320k -map_metadata 0 -id3v2_version 3 "${0%.flac}.mp3" && rm "$0"' {} \;
