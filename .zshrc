@@ -61,6 +61,7 @@ docker-compose
 zsh-autosuggestions
 zsh-syntax-highlighting
 tmux
+ubuntu
 )
 
 # Load secret environment variables
