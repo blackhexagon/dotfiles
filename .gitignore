@@ -1,2 +1,4 @@
 .config/tmux/*
 .config/github-copilot
+.config/astro
+.config/nextjs-nodejs
