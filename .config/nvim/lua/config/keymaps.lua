@@ -12,3 +12,7 @@ map("n", "<C-j>", ":m .+1<CR>==")
 map("i", "<C-j>", "<Esc>:m .+1<CR>==gi")
 map("n", "<C-k>", ":m .-2<CR>==")
 map("i", "<C-k>", "<Esc>:m .-2<CR>==gi")
+
+map({ "n", "v" }, "<leader>jk", "<cmd>CodeCompanionActions<CR>", { desc = "Open CodeCompanionActions" })
+map({ "n" }, "<leader>jj", "<cmd>CodeCompanionChat toggle<CR>", { desc = "Toggle CodeCompanionChat" })
+map({ "v" }, "<leader>jj", "<cmd>CodeCompanionChat Add<CR>", { desc = "Adds selection to CodeCompanionChat" })
