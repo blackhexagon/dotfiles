@@ -1,7 +1,11 @@
 #!/bin/bash
 
-# Load text formatting.
-# source $HOME/scripts/text.sh
+# Check if required environment variables are set
+if [ -z "$GOODDAY_TOKEN" ] || [ -z "$GOODDAY_USER" ]; then
+  echo "Error: GOODDAY_TOKEN and GOODDAY_USER environment variables must be set."
+  echo "Create a .env file with your credentials and run: source .env"
+  exit 1
+fi
 
 GD_HEADER="gd-api-token: $GOODDAY_TOKEN"
 GD_USER="$GOODDAY_USER"
@@ -12,36 +16,93 @@ function getId() {
 }
 
 function fetchTasksWithProject() {
-  local tasks=$(curl -s -H "$GD_HEADER" $GD_URL/user/$GD_USER/action-required-tasks)
-  local projects=$(curl -s -H "$GD_HEADER" $GD_URL/projects)
-  jq --argjson tasks "$tasks" --argjson projects "$projects" -n \
+  local tasks_file=$(mktemp)
+  local projects_file=$(mktemp)
+
+  curl -s -H "$GD_HEADER" $GD_URL/user/$GD_USER/action-required-tasks >"$tasks_file"
+  curl -s -H "$GD_HEADER" $GD_URL/projects >"$projects_file"
+
+  # Check if API calls returned valid JSON
+  if ! jq empty "$tasks_file" 2>/dev/null; then
+    echo "Error: Invalid response from tasks API. Check your GOODDAY_TOKEN and GOODDAY_USER." >&2
+    rm -f "$tasks_file" "$projects_file"
+    return 1
+  fi
+
+  if ! jq empty "$projects_file" 2>/dev/null; then
+    echo "Error: Invalid response from projects API. Check your GOODDAY_TOKEN and GOODDAY_USER." >&2
+    rm -f "$tasks_file" "$projects_file"
+    return 1
+  fi
+
+  # Check if tasks response contains an error
+  if jq -e '.errorMessage' "$tasks_file" >/dev/null 2>&1; then
+    echo "Error: $(jq -r '.errorMessage' "$tasks_file"). Check your GOODDAY_TOKEN and GOODDAY_USER." >&2
+    rm -f "$tasks_file" "$projects_file"
+    return 1
+  fi
+
+  # Check if projects response contains an error
+  if jq -e '.errorMessage' "$projects_file" >/dev/null 2>&1; then
+    echo "Error: $(jq -r '.errorMessage' "$projects_file"). Check your GOODDAY_TOKEN and GOODDAY_USER." >&2
+    rm -f "$tasks_file" "$projects_file"
+    return 1
+  fi
+
+  # Check if tasks is an array
+  if ! jq -e 'type == "array"' "$tasks_file" >/dev/null 2>&1; then
+    echo "Error: Tasks API returned unexpected format. Expected array." >&2
+    rm -f "$tasks_file" "$projects_file"
+    return 1
+  fi
+
+  # Check if projects is an array
+  if ! jq -e 'type == "array"' "$projects_file" >/dev/null 2>&1; then
+    echo "Error: Projects API returned unexpected format. Expected array." >&2
+    rm -f "$tasks_file" "$projects_file"
+    return 1
+  fi
+
+  jq --slurpfile tasks "$tasks_file" --slurpfile projects "$projects_file" -n \
     '
       [
-        ($tasks[] as $t  | select($t.status.name as $status_name | ["On hold", "Completed", "Dlouhodobý"] | index($status_name) | not) |
-        $projects[] as $p | select($p.id == $t.projectId) | {task_id: $t.id, task_name: $t.name, status_name: $t.status.name, project_name: $p.name, date: $t.recentActivityMoment})
+        ($tasks[0][] as $t | select($t | has("status") and ($t.status | has("name"))) | select($t.status.name as $status_name | ["On hold", "Completed", "Dlouhodobý"] | index($status_name) | not) |
+        $projects[0][] as $p | select($p.id == $t.projectId) | {task_id: $t.id, task_name: $t.name, status_name: $t.status.name, project_name: $p.name, date: $t.recentActivityMoment})
       ]
       | sort_by(.date) | reverse
       | .[] | "[\(.date[8:10]).\(.date[5:7]) \(.date[11:16])] [\(.project_name)] \(.task_name) (\(.task_id))"
       '
+
+  rm -f "$tasks_file" "$projects_file"
 }
 
 function fetchMessagesWithUser() {
-  local messages=$(curl -s -H "$GD_HEADER" $GD_URL/task/$1/messages)
-  local users=$(curl -s -H "$GD_HEADER" $GD_URL/users)
-  jq --argjson messages "$messages" --argjson users "$users" -n \
+  local messages_file=$(mktemp)
+  local users_file=$(mktemp)
+
+  curl -s -H "$GD_HEADER" $GD_URL/task/$1/messages >"$messages_file"
+  curl -s -H "$GD_HEADER" $GD_URL/users >"$users_file"
+
+  jq --slurpfile messages "$messages_file" --slurpfile users "$users_file" -n \
     '
       [
-        ($messages[] as $m | $users[] as $u | select($u.id == $m.fromUserId) | {text: $m.message, date: "\($m.dateCreated[8:10]).\($m.dateCreated[5:7]) \($m.dateCreated[11:16])", user: $u.name})
+        ($messages[0][] as $m | $users[0][] as $u | select($u.id == $m.fromUserId) | {text: $m.message, date: "\($m.dateCreated[8:10]).\($m.dateCreated[5:7]) \($m.dateCreated[11:16])", user: $u.name})
       ]
       '
+
+  rm -f "$messages_file" "$users_file"
 }
 
 task=$(fetchTasksWithProject | fzf --layout=reverse)
+if [ $? -ne 0 ] || [ -z "$task" ]; then
+  echo "Error: Failed to fetch tasks or no task selected."
+  exit 1
+fi
 taskId=$(getId "$task")
 echo "$taskId"
 
 echo "What you want to do:"
-options=("Reply" "Detail" "Open")
+options=("Reply" "Detail" "Open" "Export to file")
 user_selection=$(printf '%s\n' "${options[@]}" | fzf --layout=reverse)
 
 # React based on user selection
@@ -67,6 +128,35 @@ case $user_selection in
       echo "================================================================"
     fi
   done
+  ;;
+"Export to file")
+  echo "Exporting task details to task.md..."
+  {
+    echo "# Task Details"
+    echo ""
+    echo "$task" | fold -s -w 64
+    echo ""
+    echo "================================================================"
+    echo ""
+    messages=$(fetchMessagesWithUser "$taskId")
+    length=$(echo "$messages" | jq '. | length')
+    for ((i = 0; i < $length; i++)); do
+      text=$(echo "$messages" | jq -r ".[$i].text")
+      date=$(echo "$messages" | jq -r ".[$i].date")
+      user=$(echo "$messages" | jq -r ".[$i].user")
+      if [[ ! -z "$text" && "$text" != "null" ]]; then
+        echo "**$user**"
+        echo ""
+        echo "*$date*"
+        echo ""
+        echo "$text" | fold -s -w 64
+        echo ""
+        echo "================================================================"
+        echo ""
+      fi
+    done
+  } > task.md
+  echo "Task details exported to task.md"
   ;;
 "Reply")
   echo "$task"

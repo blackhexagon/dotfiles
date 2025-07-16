@@ -108,7 +108,7 @@ alias lzd='lazydocker'
 alias ll='eza --long --header --git --icons --all --group-directories-first --time-style=relative'
 alias tree='eza --header --git --icons --long --header --tree --level 2 -a --group-directories-first'
 alias treegnore='eza --header --git --icons --long --header --tree --level 2 -a --group-directories-first -I=.git --git-ignore'
-alias gdd="sh ~/scripts/goodday.sh"
+alias gdd="~/scripts/goodday.sh"
 alias ccsv="xclip -o > ~/anki/clipboard.csv"
 alias scripts="cat package.json | jq --color-output '.scripts'"
 alias chrome='/mnt/c/Program\ Files/Google/Chrome/Application/chrome.exe --auto-open-devtools-for-tabs'
