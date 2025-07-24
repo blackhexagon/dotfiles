@@ -74,8 +74,6 @@ export ZSH_COMPDUMP=$ZSH/cache/.zcompdump-$HOST
 
 source $ZSH/oh-my-zsh.sh
 
-#unalias
-unalias chatgpt
 
 
 # User configuration
@@ -126,22 +124,6 @@ aic() {
   aicommits -g 3
 }
 
-ai() {
-  dt=$(date +"%y-%m-%d_%H:%M:%S")
-  input="$*"
-  trim=${input:0:40}
-  file="$HOME/chatgpt/${dt}_${trim}.md"
-  chatgpt -k $OPENAI_API_KEY -m gpt-4o -c $input | tee $file
-  clear
-  echo -e "> ${input}\n\n$(< ${file})" > $file
-  glow $file
-}
-
-aihist() {                                            
-  local file                                                              
-  file=$(ls -t $HOME/chatgpt/* | fzf) && glow "$file"
-}
-
 ggl() {
   googler "$*"
 }
@@ -161,6 +143,16 @@ prompt_context() {
   if [[ "$USER" != "$DEFAULT_USER" || -n "$SSH_CLIENT" ]]; then
       prompt_segment black default "$COMPUTER_NAME"
   fi
+}
+
+dev() {
+  tmux new-window \; \
+    split-window -h -l 160 \; \
+    split-window -v -l 10 \; \
+    send-keys -t 0 'opencode' Enter \; \
+    send-keys -t 1 'nvim .' Enter \; \
+    send-keys -t 2 'git status' Enter \; \
+    select-pane -t 1
 }
 
 killport() {                                                                                             
