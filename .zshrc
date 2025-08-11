@@ -50,18 +50,19 @@ zstyle ':omz:update' frequency 7
 # Add wisely, as too many plugins slow down shell startup.
 
 plugins=(
-git
-gh
-nvm
-npm
-git-open
-web-search
-fzf
-docker-compose
-zsh-autosuggestions
-zsh-syntax-highlighting
-tmux
-ubuntu
+  git
+  gh
+  nvm
+  npm
+  git-open
+  web-search
+  fzf
+  docker-compose
+  zsh-autosuggestions
+  zsh-syntax-highlighting
+  tmux
+  ubuntu
+  gcloud
 )
 
 # Load secret environment variables
@@ -146,13 +147,19 @@ prompt_context() {
 }
 
 dev() {
-  tmux new-window \; \
-    split-window -h -l 160 \; \
+  tmux split-window -h -l 160 \; \
     split-window -v -l 10 \; \
     send-keys -t 0 'opencode' Enter \; \
     send-keys -t 1 'nvim .' Enter \; \
     send-keys -t 2 'git status' Enter \; \
     select-pane -t 1
+}
+
+thirds() {
+  tmux split-window -h \; \
+  select-pane -R \; \
+  split-window -h \; \
+  select-layout even-horizontal
 }
 
 killport() {                                                                                             
@@ -189,3 +196,4 @@ eval "$(zoxide init zsh)"
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
