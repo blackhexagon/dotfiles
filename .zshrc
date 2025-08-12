@@ -50,18 +50,19 @@ zstyle ':omz:update' frequency 7
 # Add wisely, as too many plugins slow down shell startup.
 
 plugins=(
-git
-gh
-nvm
-npm
-git-open
-web-search
-fzf
-docker-compose
-zsh-autosuggestions
-zsh-syntax-highlighting
-tmux
-ubuntu
+  git
+  gh
+  nvm
+  npm
+  git-open
+  web-search
+  fzf
+  docker-compose
+  zsh-autosuggestions
+  zsh-syntax-highlighting
+  tmux
+  ubuntu
+  gcloud
 )
 
 # Load secret environment variables
@@ -74,8 +75,6 @@ export ZSH_COMPDUMP=$ZSH/cache/.zcompdump-$HOST
 
 source $ZSH/oh-my-zsh.sh
 
-#unalias
-unalias chatgpt
 
 
 # User configuration
@@ -126,22 +125,6 @@ aic() {
   aicommits -g 3
 }
 
-ai() {
-  dt=$(date +"%y-%m-%d_%H:%M:%S")
-  input="$*"
-  trim=${input:0:40}
-  file="$HOME/chatgpt/${dt}_${trim}.md"
-  chatgpt -k $OPENAI_API_KEY -m gpt-4o -c $input | tee $file
-  clear
-  echo -e "> ${input}\n\n$(< ${file})" > $file
-  glow $file
-}
-
-aihist() {                                            
-  local file                                                              
-  file=$(ls -t $HOME/chatgpt/* | fzf) && glow "$file"
-}
-
 ggl() {
   googler "$*"
 }
@@ -161,6 +144,22 @@ prompt_context() {
   if [[ "$USER" != "$DEFAULT_USER" || -n "$SSH_CLIENT" ]]; then
       prompt_segment black default "$COMPUTER_NAME"
   fi
+}
+
+dev() {
+  tmux split-window -h -l 160 \; \
+    split-window -v -l 10 \; \
+    send-keys -t 0 'opencode' Enter \; \
+    send-keys -t 1 'nvim .' Enter \; \
+    send-keys -t 2 'git status' Enter \; \
+    select-pane -t 1
+}
+
+thirds() {
+  tmux split-window -h \; \
+  select-pane -R \; \
+  split-window -h \; \
+  select-layout even-horizontal
 }
 
 killport() {                                                                                             
@@ -197,3 +196,4 @@ eval "$(zoxide init zsh)"
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
