@@ -1,4 +1,5 @@
 .config/tmux/*
 .config/github-copilot
 .config/astro
+.config/btop
 .config/nextjs-nodejs
