@@ -1,13 +1,8 @@
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
 export PATH="$PATH:/usr/bin"
-# For AI chat without quotes
-setopt NO_NOMATCH
-
-# Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 export EDITOR="nvim"
 export DOCKER_HOST=unix://$XDG_RUNTIME_DIR/docker.sock
+
 export FZF_DEFAULT_OPTS=" \
 --color=bg+:#ccd0da,bg:#eff1f5,spinner:#dc8a78,hl:#d20f39 \
 --color=fg:#4c4f69,header:#d20f39,info:#8839ef,pointer:#dc8a78 \
@@ -75,21 +70,12 @@ export ZSH_COMPDUMP=$ZSH/cache/.zcompdump-$HOST
 
 source $ZSH/oh-my-zsh.sh
 
-
-
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
-
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -98,17 +84,13 @@ source $ZSH/oh-my-zsh.sh
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
 # For a full list of active aliases, run `alias`.
-
-alias zshconf="micro ~/.zshrc"
-alias ohmyzsh="micro ~/.oh-my-zsh"
-alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
-alias update='bash ~/scripts/update.sh'
+alias vi="nvim ."
+alias zshconf="$EDITOR ~/.zshrc"
 alias lzd='lazydocker'
 alias ll='eza --long --header --git --icons --all --group-directories-first --time-style=relative'
 alias tree='eza --header --git --icons --long --header --tree --level 2 -a --group-directories-first'
 alias treegnore='eza --header --git --icons --long --header --tree --level 2 -a --group-directories-first -I=.git --git-ignore'
 alias gdd="~/scripts/goodday.sh"
-alias ccsv="xclip -o > ~/anki/clipboard.csv"
 alias scripts="cat package.json | jq --color-output '.scripts'"
 alias chrome='/mnt/c/Program\ Files/Google/Chrome/Application/chrome.exe --auto-open-devtools-for-tabs'
 
@@ -123,10 +105,6 @@ ogg2mp3() {
 aic() {
   git add .
   aicommits -g 3
-}
-
-ggl() {
-  googler "$*"
 }
 
 fif() {
@@ -146,13 +124,17 @@ prompt_context() {
   fi
 }
 
+precmd() {
+  tmux rename-window "$(basename "$PWD")"
+}
+
 dev() {
   tmux split-window -h -l 160 \; \
     split-window -v -l 10 \; \
-    send-keys -t 0 'opencode' Enter \; \
-    send-keys -t 1 'nvim .' Enter \; \
-    send-keys -t 2 'git status' Enter \; \
-    select-pane -t 1
+    send-keys -t 1 'opencode' Enter \; \
+    send-keys -t 2 'nvim .' Enter \; \
+    send-keys -t 3 'git status' Enter \; \
+    select-pane -t 2
 }
 
 thirds() {
