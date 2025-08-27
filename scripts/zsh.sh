@@ -7,10 +7,9 @@ sudo apt update
 sudo apt install -y zsh
 
 # Verify installation
-if ! command -v zsh &> /dev/null
-then
-    echo "Zsh installation failed. Exiting."
-    exit 1
+if ! command -v zsh &>/dev/null; then
+  echo "Zsh installation failed. Exiting."
+  exit 1
 fi
 
 echo "Zsh installed successfully."
