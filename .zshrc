@@ -137,7 +137,9 @@ r () {
 # }
 
 precmd() {
-  tmux rename-window "$(basename "$PWD")"
+  if [[ -n "$TMUX" ]]; then
+    tmux rename-window "$(basename "$PWD")"
+  fi
 }
 
 dev() {
