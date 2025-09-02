@@ -70,7 +70,7 @@ function fetchTasksWithProject() {
         $projects[0][] as $p | select($p.id == $t.projectId) | {task_id: $t.id, task_name: $t.name, status_name: $t.status.name, project_name: $p.name, date: $t.recentActivityMoment})
       ]
       | sort_by(.date) | reverse
-      | .[] | "[\(.date[8:10]).\(.date[5:7]) \(.date[11:16])] [\(.project_name)] \(.task_name) (\(.task_id))"
+      | .[] | "[\(.status_name)] [\(.project_name)] \(.task_name) (\(.task_id))"
       '
 
   rm -f "$tasks_file" "$projects_file"
@@ -155,7 +155,7 @@ case $user_selection in
         echo ""
       fi
     done
-  } > task.md
+  } >task.md
   echo "Task details exported to task.md"
   ;;
 "Reply")
@@ -182,7 +182,7 @@ case $user_selection in
   echo "Time log response:"
   curl -s -X POST --location "${GD_URL}/task/${taskId}/time-report" -H "$GD_HEADER" -H "Content-Type: application/json" -d '{"userId": "'"$GD_USER"'", "reportedMinutes": "'"$reported_minutes"'"}'
   echo "Check the status in a browser"
-  xdg-open "https://www.goodday.work/t/$taskId"
+  echo "https://www.goodday.work/t/$taskId"
   ;;
 *)
   echo "Invalid option: $user_selection"

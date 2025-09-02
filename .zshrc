@@ -1,10 +1,11 @@
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
-export PATH="$PATH:/usr/bin"
-# For AI chat without quotes
-setopt NO_NOMATCH
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
 
-# Path to your oh-my-zsh installation.
+export PATH="$PATH:/usr/bin"
 export ZSH="$HOME/.oh-my-zsh"
 export EDITOR="nvim"
 export DOCKER_HOST=unix://$XDG_RUNTIME_DIR/docker.sock
@@ -15,7 +16,7 @@ export FZF_DEFAULT_OPTS=" \
 --color=border:#ccd0da,label:#4c4f69"
 
 # Theme
-ZSH_THEME="agnoster"
+ZSH_THEME="powerlevel10k/powerlevel10k"
 
 # Uncomment one of the following lines to change the auto-update behavior
 zstyle ':omz:update' mode auto      # update automatically without asking
@@ -63,6 +64,7 @@ plugins=(
   tmux
   ubuntu
   gcloud
+  you-should-use
 )
 
 # Load secret environment variables
@@ -75,21 +77,12 @@ export ZSH_COMPDUMP=$ZSH/cache/.zcompdump-$HOST
 
 source $ZSH/oh-my-zsh.sh
 
-
-
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
-
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -98,19 +91,20 @@ source $ZSH/oh-my-zsh.sh
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
 # For a full list of active aliases, run `alias`.
-
-alias zshconf="micro ~/.zshrc"
-alias ohmyzsh="micro ~/.oh-my-zsh"
-alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
-alias update='bash ~/scripts/update.sh'
+alias vi="nvim ."
+alias zshconf="$EDITOR ~/.zshrc"
 alias lzd='lazydocker'
 alias ll='eza --long --header --git --icons --all --group-directories-first --time-style=relative'
 alias tree='eza --header --git --icons --long --header --tree --level 2 -a --group-directories-first'
 alias treegnore='eza --header --git --icons --long --header --tree --level 2 -a --group-directories-first -I=.git --git-ignore'
 alias gdd="~/scripts/goodday.sh"
-alias ccsv="xclip -o > ~/anki/clipboard.csv"
 alias scripts="cat package.json | jq --color-output '.scripts'"
 alias chrome='/mnt/c/Program\ Files/Google/Chrome/Application/chrome.exe --auto-open-devtools-for-tabs'
+
+# Bat
+alias cat='batcat'
+export BAT_THEME="Catppuccin Latte"
+export MANPAGER="sh -c 'awk '\''{ gsub(/\x1B\[[0-9;]*m/, \"\", \$0); gsub(/.\x08/, \"\", \$0); print }'\'' | batcat -p -lman'"
 
 flac2mp3() {
 	find . -type f -name "*.flac" -exec sh -c 'ffmpeg -i "$0" -b:a 320k -map_metadata 0 -id3v2_version 3 "${0%.flac}.mp3" && rm "$0"' {} \;
@@ -125,13 +119,9 @@ aic() {
   aicommits -g 3
 }
 
-ggl() {
-  googler "$*"
-}
-
 fif() {
   if [ ! "$#" -gt 0 ]; then echo "Need a string to search for!"; return 1; fi
-  rg --files-with-matches --no-messages "$1" | fzf --preview "highlight -O ansi -l {} 2> /dev/null | rg --colors 'match:bg:yellow' --ignore-case --pretty --context 10 '$1' || rg --ignore-case --pretty --context 10 '$1' {}" | xargs nvim
+  rg --files-with-matches --no-messages "$1" | fzf --preview 'batcat --color=always {}' --preview-window '~3'| xargs $EDITOR
 }
 
 # Navigating to project root
@@ -140,19 +130,25 @@ r () {
 }
 
 # Remove username & machine from the prompt
-prompt_context() {
-  if [[ "$USER" != "$DEFAULT_USER" || -n "$SSH_CLIENT" ]]; then
-      prompt_segment black default "$COMPUTER_NAME"
+# prompt_context() {
+#   if [[ "$USER" != "$DEFAULT_USER" || -n "$SSH_CLIENT" ]]; then
+#       prompt_segment black default "$COMPUTER_NAME"
+#   fi
+# }
+
+precmd() {
+  if [[ -n "$TMUX" ]]; then
+    tmux rename-window "$(basename "$PWD")"
   fi
 }
 
 dev() {
   tmux split-window -h -l 160 \; \
     split-window -v -l 10 \; \
-    send-keys -t 0 'opencode' Enter \; \
-    send-keys -t 1 'nvim .' Enter \; \
-    send-keys -t 2 'git status' Enter \; \
-    select-pane -t 1
+    send-keys -t 1 'opencode' Enter \; \
+    send-keys -t 2 'nvim .' Enter \; \
+    send-keys -t 3 'git status' Enter \; \
+    select-pane -t 2
 }
 
 thirds() {
@@ -207,3 +203,5 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
