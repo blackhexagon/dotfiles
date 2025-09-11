@@ -158,6 +158,16 @@ thirds() {
   select-layout even-horizontal
 }
 
+bwfind() {
+  if [ -z "$1" ]; then
+    echo "Usage: bwfind <search-term>"
+    return 1
+  fi
+
+  bw list items --search "$1" \
+    | jq -r '.[] | "\(.name)\t\(.login.username)\t\(.login.password)"'
+}
+
 killport() {                                                                                             
   # Prompt the user for the port number                                                                           
   read -p "Enter the port number you want to kill: " port                                                         
