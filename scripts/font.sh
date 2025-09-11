@@ -2,7 +2,7 @@
 
 # Define variables
 FONT_DIR="$HOME/.local/share/fonts"
-FONT_NAME="JetBrainsMono"
+FONT_NAME="MapleMonoNF"
 FONT_URL="https://github.com/ryanoasis/nerd-fonts/releases/latest/download/${FONT_NAME}.zip"
 TMP_DIR="/tmp/${FONT_NAME}-nerdfont"
 
@@ -10,7 +10,7 @@ TMP_DIR="/tmp/${FONT_NAME}-nerdfont"
 mkdir -p "$TMP_DIR"
 
 # Download the font
-echo "Downloading JetBrains Mono Nerd Font..."
+echo "Downloading Maple Mono Nerd Font..."
 wget -q --show-progress -O "$TMP_DIR/${FONT_NAME}.zip" "$FONT_URL"
 
 # Create font directory if it doesn't exist
@@ -27,4 +27,4 @@ fc-cache -fv
 # Clean up
 rm -rf "$TMP_DIR"
 
-echo "Installation complete! JetBrains Mono Nerd Font is now available."
+echo "Installation complete! Maple Mono Nerd Font is now available."
