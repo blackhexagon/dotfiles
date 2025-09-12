@@ -103,6 +103,7 @@ alias chrome='/mnt/c/Program\ Files/Google/Chrome/Application/chrome.exe --auto-
 
 # Kitty
 alias kitty='kitty --start-as=fullscreen'
+alias icat='kitten icat'
 
 # Bat
 alias cat='batcat'
