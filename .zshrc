@@ -164,8 +164,13 @@ bwfind() {
     return 1
   fi
 
+  if [ -z "$BW_SESSION" ]; then
+    echo "Please unlock Bitwarden first: export BW_SESSION=\$(bw unlock --raw)"
+    return 1
+  fi
+
   bw list items --search "$1" \
-    | jq -r '.[] | "\(.name)\t\(.login.username)\t\(.login.password)"'
+    | jq -r '.[] | if .type == 2 then "\(.name)\t\(.notes)" else "\(.name)\t\(.login.username)\t\(.login.password)" end'
 }
 
 killport() {                                                                                             
