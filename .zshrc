@@ -143,8 +143,8 @@ precmd() {
 }
 
 dev() {
-  tmux split-window -h -l 160 \; \
-    split-window -v -l 10 \; \
+  tmux split-window -h -p 67 \; \
+    split-window -v -p 25 \; \
     send-keys -t 1 'opencode' Enter \; \
     send-keys -t 2 'nvim .' Enter \; \
     send-keys -t 3 'git status' Enter \; \
