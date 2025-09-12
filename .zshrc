@@ -101,6 +101,9 @@ alias gdd="~/scripts/goodday.sh"
 alias scripts="cat package.json | jq --color-output '.scripts'"
 alias chrome='/mnt/c/Program\ Files/Google/Chrome/Application/chrome.exe --auto-open-devtools-for-tabs'
 
+# Kitty
+alias kitty='kitty --start-as=fullscreen'
+
 # Bat
 alias cat='batcat'
 export BAT_THEME="Catppuccin Latte"
