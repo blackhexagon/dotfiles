@@ -388,8 +388,8 @@
 
     # Styling for different parts of Git status.
     local       meta='%7F' # white foreground
-    local      clean='%0F' # black foreground
-    local   modified='%0F' # black foreground
+    local      clean='%254F' # very light gray/white
+    local   modified='%254F' # very light gray/white
     local  untracked='%0F' # black foreground
     local conflicted='%1F' # red foreground
 
