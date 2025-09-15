@@ -5,7 +5,7 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-export PATH="$PATH:/usr/bin"
+export PATH="$PATH:/usr/bin:/usr/local/go/bin"
 export ZSH="$HOME/.oh-my-zsh"
 export EDITOR="nvim"
 export DOCKER_HOST=unix://$XDG_RUNTIME_DIR/docker.sock
@@ -101,6 +101,10 @@ alias gdd="~/scripts/goodday.sh"
 alias scripts="cat package.json | jq --color-output '.scripts'"
 alias chrome='/mnt/c/Program\ Files/Google/Chrome/Application/chrome.exe --auto-open-devtools-for-tabs'
 
+# Kitty
+alias kitty='kitty --start-as=fullscreen'
+alias icat='kitten icat'
+
 # Bat
 alias cat='batcat'
 export BAT_THEME="Catppuccin Latte"
@@ -143,8 +147,8 @@ precmd() {
 }
 
 dev() {
-  tmux split-window -h -l 160 \; \
-    split-window -v -l 10 \; \
+  tmux split-window -h -p 67 \; \
+    split-window -v -p 25 \; \
     send-keys -t 1 'opencode' Enter \; \
     send-keys -t 2 'nvim .' Enter \; \
     send-keys -t 3 'git status' Enter \; \
@@ -156,6 +160,16 @@ thirds() {
   select-pane -R \; \
   split-window -h \; \
   select-layout even-horizontal
+}
+
+bwfind() {
+  if [ -z "$1" ]; then
+    echo "Usage: bwfind <search-term>"
+    return 1
+  fi
+
+  bw list items --search "$1" \
+    | jq -r '.[] | "\(.name)\t\(.login.username)\t\(.login.password)"'
 }
 
 killport() {                                                                                             
