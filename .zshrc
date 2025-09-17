@@ -103,7 +103,35 @@ alias chrome='/mnt/c/Program\ Files/Google/Chrome/Application/chrome.exe --auto-
 
 # Kitty
 alias kitty='kitty --start-as=fullscreen'
-alias icat='kitten icat'
+icat() {
+    if [ $# -eq 0 ]; then
+        echo "Usage: icat <file> [options]"
+        return 1
+    fi
+    
+    local file="$1"
+    shift
+    
+    if [ ! -f "$file" ]; then
+        echo "File not found: $file"
+        return 1
+    fi
+    
+    # Get file mime type
+    local mime_type=$(file --mime-type -b "$file")
+    
+    case "$mime_type" in
+        video/*)
+            # Only handle videos specially - everything else goes to kitten icat
+            local timestamp="${ICAT_VIDEO_TIME:-00:00:05}"
+            ffmpeg -ss "$timestamp" -i "$file" -vframes 1 -f image2pipe -vcodec png - 2>/dev/null | kitten icat "$@"
+            ;;
+        *)
+            # Let kitten icat handle everything else (images, SVG, PDF, etc.)
+            kitten icat "$file" "$@"
+            ;;
+    esac
+}
 
 # Bat
 alias cat='batcat'
