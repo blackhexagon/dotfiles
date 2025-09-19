@@ -101,6 +101,38 @@ alias gdd="~/scripts/goodday.sh"
 alias scripts="cat package.json | jq --color-output '.scripts'"
 alias chrome='/mnt/c/Program\ Files/Google/Chrome/Application/chrome.exe --auto-open-devtools-for-tabs'
 
+# Kitty
+alias kitty='kitty --start-as=fullscreen'
+icat() {
+    if [ $# -eq 0 ]; then
+        echo "Usage: icat <file> [options]"
+        return 1
+    fi
+    
+    local file="$1"
+    shift
+    
+    if [ ! -f "$file" ]; then
+        echo "File not found: $file"
+        return 1
+    fi
+    
+    # Get file mime type
+    local mime_type=$(file --mime-type -b "$file")
+    
+    case "$mime_type" in
+        video/*)
+            # Only handle videos specially - everything else goes to kitten icat
+            local timestamp="${ICAT_VIDEO_TIME:-00:00:05}"
+            ffmpeg -ss "$timestamp" -i "$file" -vframes 1 -f image2pipe -vcodec png - 2>/dev/null | kitten icat "$@"
+            ;;
+        *)
+            # Let kitten icat handle everything else (images, SVG, PDF, etc.)
+            kitten icat "$file" "$@"
+            ;;
+    esac
+}
+
 # Bat
 alias cat='batcat'
 export BAT_THEME="Catppuccin Latte"
@@ -143,8 +175,8 @@ precmd() {
 }
 
 dev() {
-  tmux split-window -h -l 160 \; \
-    split-window -v -l 10 \; \
+  tmux split-window -h -p 67 \; \
+    split-window -v -p 25 \; \
     send-keys -t 1 'opencode' Enter \; \
     send-keys -t 2 'nvim .' Enter \; \
     send-keys -t 3 'git status' Enter \; \
