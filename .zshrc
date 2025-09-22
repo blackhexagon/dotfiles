@@ -5,7 +5,7 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-export PATH="$PATH:/usr/bin:/usr/local/go/bin"
+export PATH="$PATH:/usr/bin:/usr/local/go/bin:/snap/bin"
 export ZSH="$HOME/.oh-my-zsh"
 export EDITOR="nvim"
 export DOCKER_HOST=unix://$XDG_RUNTIME_DIR/docker.sock
@@ -175,8 +175,8 @@ precmd() {
 }
 
 dev() {
-  tmux split-window -h -p 67 \; \
-    split-window -v -p 25 \; \
+  tmux split-window -h -l 67% \; \
+    split-window -v -l 25% \; \
     send-keys -t 1 'opencode' Enter \; \
     send-keys -t 2 'nvim .' Enter \; \
     send-keys -t 3 'git status' Enter \; \
