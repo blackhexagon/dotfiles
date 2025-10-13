@@ -22,3 +22,5 @@
     colorMoved = default
 [pull]
 	rebase = false
+[coderabbit]
+	machineId = cli/781586070dd7421780f89fce6ea10686

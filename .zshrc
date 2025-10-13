@@ -5,7 +5,7 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-export PATH="$PATH:/usr/bin:/usr/local/go/bin:/snap/bin"
+export PATH="$PATH:/usr/bin:/usr/local/go/bin:/snap/bin:/home/u2b22/.local/bin"
 export ZSH="$HOME/.oh-my-zsh"
 export EDITOR="nvim"
 export DOCKER_HOST=unix://$XDG_RUNTIME_DIR/docker.sock

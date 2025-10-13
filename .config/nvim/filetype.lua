@@ -1,5 +1,5 @@
 vim.filetype.add({
   extension = {
-    latte = "smarty",
+    latte = "html",
   },
 })
