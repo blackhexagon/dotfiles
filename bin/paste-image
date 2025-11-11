@@ -1,0 +1,12 @@
+#!/bin/bash
+output_file="${1:-image.png}"
+powershell.exe -command "
+\$img = Get-Clipboard -Format Image
+if (\$img) {
+    \$img.Save('$(wslpath -w "$(pwd)")\\$output_file')
+    Write-Host 'Image saved to $output_file'
+} else {
+    Write-Host 'Error: No image in clipboard'
+    exit 1
+}
+"
