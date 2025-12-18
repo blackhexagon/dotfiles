@@ -11,6 +11,101 @@ GD_HEADER="gd-api-token: $GOODDAY_TOKEN"
 GD_USER="$GOODDAY_USER"
 GD_URL="https://api.goodday.work/2.0"
 
+# Associative array for status-to-emoji mappings
+declare -A STATUS_EMOJIS=(
+  ["Review"]="👀"
+  ["Lead💡"]="💡"
+  ["Not started"]="🔜"
+  ["In progress"]="📈"
+  ["On hold 🛑"]="⏸️"
+  ["Closed"]="🔒"
+  ["- CANCELLED"]="❌"
+  ["Archived"]="📦"
+  ["- COMPLETED"]="✅"
+  ["Open"]="📂"
+  ["Committed"]="✓"
+  ["Active"]="🟢"
+  ["Planning"]="📋"
+  ["Initiation"]="🚀"
+  ["Launch"]="🎯"
+  ["Implementation"]="⚙️"
+  ["U klienta"]="👤"
+  ["Dlouhodobý"]="🐌"
+  ["K otestování - DEV"]="🧪"
+  ["K otestování - Prod"]="🔬"
+  ["code review"]="🔍"
+  ["- BLOCKED"]="🚫"
+  ["k nahrání na produkci"]="📤"
+  ["CODE REVIEW - CHANGES REQUESTED"]="🔄"
+  ["TODO"]="📝"
+  ["- REVIEW (Stage)"]="👁️"
+  ["REVIEW Dev"]="🔎"
+  ["- TODO (Sprint backlog)"]="📌"
+  ["- CLIENT APPROVE"]="✋"
+  ["- INT"]="🔗"
+  ["- TO RELEASE (Stage > Produkce)"]="🚢"
+  ["- RELEASED (Produkce)"]="🎉"
+  ["- NEW (Product backlog)"]="🆕"
+  ["- IN PROGRESS"]="▶️"
+  ["- ON HOLD"]="⏸️"
+  ["- PREDANO (K Fakturaci)"]="💰"
+  ["Estimation"]="🔢"
+  ["Attempting Contact"]="📞"
+  ["Unqualified"]="❓"
+  ["Qualified"]="✓"
+  ["Vyjednávání 🤝"]="🤝"
+  ["Won 🎉"]="🏆"
+  ["Lost 💔"]="💔"
+  ["Schůzka 📆"]="📆"
+)
+
+function mapStatusToEmoji() {
+  local status="$1"
+  local emoji="${STATUS_EMOJIS[$status]}"
+
+  # If exact match found, return it
+  if [ -n "$emoji" ]; then
+    echo "$emoji"
+  else
+    # Fallback: Try case-insensitive match
+    for key in "${!STATUS_EMOJIS[@]}"; do
+      if [[ "${status,,}" == "${key,,}" ]]; then
+        echo "${STATUS_EMOJIS[$key]}"
+        return
+      fi
+    done
+    # Final fallback: Return a generic bullet
+    echo "•"
+  fi
+}
+
+# Associative array for project-to-shortname mappings
+declare -A PROJECT_SHORTNAMES=(
+  ["Visualio"]="VISU"
+  ["Brandmatcha"]="BM"
+  ["Goldfingers"]="GF"
+)
+
+function mapProjectToShort() {
+  local project="$1"
+  local shortname="${PROJECT_SHORTNAMES[$project]}"
+
+  # If exact match found, return it
+  if [ -n "$shortname" ]; then
+    echo "$shortname"
+  else
+    # Fallback: Try case-insensitive match
+    for key in "${!PROJECT_SHORTNAMES[@]}"; do
+      if [[ "${project,,}" == "${key,,}" ]]; then
+        echo "${PROJECT_SHORTNAMES[$key]}"
+        return
+      fi
+    done
+    # Final fallback: Return first 10 chars of project name
+    echo "${project:0:10}"
+  fi
+}
+
 function getId() {
   echo "$1" | grep -oP '\(\K[^()]*' | tail -1
 }
@@ -70,8 +165,12 @@ function fetchTasksWithProject() {
         $projects[0][] as $p | select($p.id == $t.projectId) | {task_id: $t.id, task_name: $t.name, status_name: $t.status.name, project_name: $p.name, date: $t.recentActivityMoment})
       ]
       | sort_by(.date) | reverse
-      | .[] | "[\(.status_name)] [\(.project_name)] \(.task_name) (\(.task_id))"
-      '
+      | .[] | "\(.task_id)|\(.status_name)|\(.project_name)|\(.task_name)"
+    ' | while IFS='|' read -r task_id status project task_name; do
+    emoji=$(mapStatusToEmoji "$status")
+    shortproject=$(mapProjectToShort "$project")
+    echo "$emoji $shortproject: $task_name"
+  done
 
   rm -f "$tasks_file" "$projects_file"
 }
