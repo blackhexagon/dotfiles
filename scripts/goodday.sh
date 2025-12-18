@@ -169,7 +169,15 @@ function fetchTasksWithProject() {
     ' | while IFS='|' read -r task_id status project task_name; do
     emoji=$(mapStatusToEmoji "$status")
     shortproject=$(mapProjectToShort "$project")
-    echo "$emoji $shortproject: $task_name"
+
+    # Remove project name or shortname from task_name if present
+    # Try removing patterns like "[ProjectName]", "ProjectName:", "ProjectName -", etc.
+    clean_task_name="$task_name"
+    clean_task_name=$(echo "$clean_task_name" | sed -E "s/\[?${project}\]?:?\s*-?\s*//gi")
+    clean_task_name=$(echo "$clean_task_name" | sed -E "s/\[?${shortproject}\]?:?\s*-?\s*//gi")
+    clean_task_name=$(echo "$clean_task_name" | sed -E 's/^[[:space:]]+|[[:space:]]+$//')
+
+    echo "$emoji $shortproject: $clean_task_name"
   done
 
   rm -f "$tasks_file" "$projects_file"
