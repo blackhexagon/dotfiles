@@ -274,13 +274,20 @@ case $user_selection in
   url=
   echo "Change AR:"
   users=$(curl -s -H "$GD_HEADER" $GD_URL/users)
-  ar_user=$(echo $users | jq -r '.[] | .name + " (" + .id + ")"' | fzf --layout=reverse)
+  ar_user=$(echo $users | jq -r 'sort_by(.name != "Filip") | .[] | .name + " (" + .id + ")"' | fzf --layout=reverse)
   ar_user_id=$(getId "$ar_user")
   echo "Selected user: $ar_user_id"
   echo "Your reply text:"
-  read user_reply
+  reply_options=("Letí to na server, za moment můžeš kouknout" "Fixed. Díky za report." "(custom message)")
+  selected_reply=$(printf '%s\n' "${reply_options[@]}" | fzf --layout=reverse)
+
+  if [ "$selected_reply" = "(custom message)" ]; then
+    read user_reply
+  else
+    user_reply="$selected_reply"
+  fi
   echo "Time report:"
-  minutes=(0 5 10 15 30 45 60 120)
+  minutes=(0 5 10 15 30 45 60 120 180 240 300 360 420)
   reported_minutes=$(printf '%s\n' "${minutes[@]}" | fzf --layout=reverse)
   echo "Change status response:"
   curl -s -X PUT --location "${GD_URL}/task/${taskId}/status" -H "$GD_HEADER" -H "Content-Type: application/json" -d '{"userId": "'"$GD_USER"'", "statusId": "'"$status_id"'"}'
