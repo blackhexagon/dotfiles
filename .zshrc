@@ -202,7 +202,8 @@ bwfind() {
   fi
 
   bw list items --search "$1" \
-    | jq -r '.[] | if .type == 2 then "\(.name)\t\(.notes)" else "\(.name)\t\(.login.username)\t\(.login.password)" end'
+    | jq -r '["NAME", "USERNAME", "PASSWORD"], (.[] | if .type == 2 then [.name, .notes // "", ""] else [.name, .login.username // "", .login.password // ""] end) | @tsv' \
+    | column -t -s $'\t'
 }
 
 killport() {                                                                                             
