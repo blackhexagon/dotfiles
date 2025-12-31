@@ -134,7 +134,7 @@ icat() {
 }
 
 # Bat
-alias cat='batcat'
+alias cat='bat'
 export BAT_THEME="Catppuccin Latte"
 export MANPAGER="sh -c 'awk '\''{ gsub(/\x1B\[[0-9;]*m/, \"\", \$0); gsub(/.\x08/, \"\", \$0); print }'\'' | batcat -p -lman'"
 
