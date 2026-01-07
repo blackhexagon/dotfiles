@@ -177,7 +177,7 @@ function fetchTasksWithProject() {
     clean_task_name=$(echo "$clean_task_name" | sed -E "s/\[?${shortproject}\]?:?\s*-?\s*//gi")
     clean_task_name=$(echo "$clean_task_name" | sed -E 's/^[[:space:]]+|[[:space:]]+$//')
 
-    echo "$emoji $shortproject: $clean_task_name"
+    echo "$emoji $shortproject: $clean_task_name ($task_id)"
   done
 
   rm -f "$tasks_file" "$projects_file"
