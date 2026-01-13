@@ -1,0 +1,171 @@
+# Custom Zsh Functions
+
+# AI commit helper
+aic() {
+  git add .
+  aicommits -g 3
+}
+
+# Find in files with fzf preview
+fif() {
+  if [ ! "$#" -gt 0 ]; then echo "Need a string to search for!"; return 1; fi
+  rg --files-with-matches --no-messages "$1" | fzf --preview 'batcat --color=always {}' --preview-window '~3'| xargs $EDITOR
+}
+
+# Navigate to project root
+r() {
+  cd "$(git rev-parse --show-toplevel 2>/dev/null)"
+}
+
+# Rename tmux window to current directory basename
+precmd() {
+  if [[ -n "$TMUX" ]]; then
+    tmux rename-window "$(basename "$PWD")"
+  fi
+}
+
+# Setup dev environment with tmux splits
+dev() {
+  tmux split-window -h -l 67% \; \
+    split-window -v -l 25% \; \
+    send-keys -t 1 'claude' Enter \; \
+    send-keys -t 2 'nvim .' Enter \; \
+    send-keys -t 3 'git status' Enter \; \
+    select-pane -t 2
+}
+
+# Split tmux window into thirds
+thirds() {
+  tmux split-window -h \; \
+  select-pane -R \; \
+  split-window -h \; \
+  select-layout even-horizontal
+}
+
+# Search Bitwarden and display items in a table
+bwfind() {
+  if [ -z "$1" ]; then
+    echo "Usage: bwfind <search-term>"
+    return 1
+  fi
+
+  if [ -z "$BW_SESSION" ]; then
+    echo "Please unlock Bitwarden first: export BW_SESSION=\$(bw unlock --raw)"
+    return 1
+  fi
+
+  bw list items --search "$1" \
+    | jq -r '["NAME", "USERNAME", "PASSWORD"], (.[] | if .type == 2 then [.name, .notes // "", ""] else [.name, .login.username // "", .login.password // ""] end) | @tsv' \
+    | column -t -s $'\t'
+}
+
+# Kill process running on a specific port
+killport() {
+  # Prompt the user for the port number
+  read -p "Enter the port number you want to kill: " port
+
+  # Find the process ID (PID) using `ss` and `awk`
+  pid=$(sudo ss -ltnp | grep ":$port" | awk '{for(i=1;i<=NF;i++) if($i ~ "pid=") print substr($i,5)}')
+
+# Check if we got a PID
+  if [ ! -z "$pid" ]; then
+    echo "Killing process with PID $pid on port $port"
+
+    # Attempt to kill the process gently with SIGTERM
+    sudo kill $pid
+
+    # If the process does not terminate after some time, force it to close
+    if kill -0 $pid 2>/dev/null; then
+      echo "Process did not terminate, forcing it to stop..."
+      sudo kill -9 $pid
+    fi
+
+    echo "Process killed."
+  else
+    echo "No process found running on port $port."
+  fi
+}
+
+# Connect to FTP server using Bitwarden credentials
+bwftp() {
+  # Check if BW_SESSION is set
+  if [ -z "$BW_SESSION" ]; then
+    echo "Please unlock Bitwarden first: export BW_SESSION=\$(bw unlock --raw)"
+    return 1
+  fi
+
+  # Check if required commands are available
+  if ! command -v fzf &> /dev/null; then
+    echo "Error: fzf is required but not installed"
+    return 1
+  fi
+
+  # Get all login items from Bitwarden and format for fzf
+  # Use a temp file to avoid control character issues
+  local temp_file=$(mktemp)
+  
+  # Get all items and filter for login type, then format as TSV
+  bw list items 2>/dev/null | jq -r '.[] | select(.type == 1 and .login != null) | [.id, .name, (.login.username // "no-username")] | @tsv' > "$temp_file" 2>/dev/null
+
+  if [ ! -s "$temp_file" ]; then
+    rm -f "$temp_file"
+    echo "No login items found in Bitwarden"
+    return 1
+  fi
+
+  # Let user select and filter with fzf
+  # The search term can be provided as argument or typed in fzf
+  local fzf_query="${1:-}"
+  local selected=$(cat "$temp_file" | fzf --query="$fzf_query" --delimiter='\t' --with-nth=2,3 --prompt="Select FTP server: " --height=40% --reverse)
+  rm -f "$temp_file"
+
+  if [ -z "$selected" ]; then
+    echo "No item selected"
+    return 1
+  fi
+
+  # Extract the item ID
+  local item_id=$(echo "$selected" | cut -f1)
+
+  # Get the specific item by ID (more reliable than parsing from list)
+  local item=$(bw get item "$item_id" 2>/dev/null)
+
+  if [ -z "$item" ]; then
+    echo "Error: Could not retrieve item details"
+    return 1
+  fi
+
+  # Extract credentials and URI
+  local username=$(echo "$item" | jq -r '.login.username // ""')
+  local password=$(echo "$item" | jq -r '.login.password // ""')
+  local uri=$(echo "$item" | jq -r '.login.uris[0].uri // ""')
+
+  # Validate required fields
+  if [ -z "$username" ]; then
+    echo "Error: No username found for selected item"
+    return 1
+  fi
+
+  if [ -z "$password" ]; then
+    echo "Error: No password found for selected item"
+    return 1
+  fi
+
+  if [ -z "$uri" ]; then
+    echo "Error: No URI found for selected item"
+    return 1
+  fi
+
+  # Parse host from URI (remove protocol if present)
+  local host=$(echo "$uri" | sed -E 's|^[a-zA-Z]+://||' | sed -E 's|/.*$||')
+
+  # Construct lftp command
+  local lftp_cmd="lftp -u ${username},${password} ftp://${host}"
+
+  # Display command with masked password
+  echo "Executing: lftp -u ${username},*** ftp://${host}"
+  echo ""
+
+  # Execute the command
+  eval "$lftp_cmd"
+}

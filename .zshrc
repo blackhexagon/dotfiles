@@ -8,7 +8,6 @@ fi
 export PATH="$PATH:/usr/bin:/usr/local/go/bin:/snap/bin:/home/u2b22/.local/bin:$HOME/bin"
 export ZSH="$HOME/.oh-my-zsh"
 export EDITOR="nvim"
-export DOCKER_HOST=unix://$XDG_RUNTIME_DIR/docker.sock
 export FZF_DEFAULT_OPTS=" \
 --color=bg+:#ccd0da,bg:#eff1f5,spinner:#dc8a78,hl:#d20f39 \
 --color=fg:#4c4f69,header:#d20f39,info:#8839ef,pointer:#dc8a78 \
@@ -23,12 +22,6 @@ zstyle ':omz:update' mode auto      # update automatically without asking
 
 # Uncomment the following line to change how often to auto-update (in days).
 zstyle ':omz:update' frequency 7
-
-# Uncomment the following line if pasting URLs and other text is messed up.
-# DISABLE_MAGIC_FUNCTIONS="true"
-
-# Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
 
 # Uncomment the following line to enable command auto-correction.
 # ENABLE_CORRECTION="true"
@@ -99,138 +92,16 @@ alias tree='eza --header --git --icons --long --header --tree --level 2 -a --gro
 alias treegnore='eza --header --git --icons --long --header --tree --level 2 -a --group-directories-first -I=.git --git-ignore'
 alias gdd="~/scripts/goodday.sh"
 alias scripts="cat package.json | jq --color-output '.scripts'"
-alias chrome='/mnt/c/Program\ Files/Google/Chrome/Application/chrome.exe --auto-open-devtools-for-tabs'
-
-# Kitty
-alias kitty='kitty --start-as=fullscreen'
-icat() {
-    if [ $# -eq 0 ]; then
-        echo "Usage: icat <file> [options]"
-        return 1
-    fi
-    
-    local file="$1"
-    shift
-    
-    if [ ! -f "$file" ]; then
-        echo "File not found: $file"
-        return 1
-    fi
-    
-    # Get file mime type
-    local mime_type=$(file --mime-type -b "$file")
-    
-    case "$mime_type" in
-        video/*)
-            # Only handle videos specially - everything else goes to kitten icat
-            local timestamp="${ICAT_VIDEO_TIME:-00:00:05}"
-            ffmpeg -ss "$timestamp" -i "$file" -vframes 1 -f image2pipe -vcodec png - 2>/dev/null | kitten icat "$@"
-            ;;
-        *)
-            # Let kitten icat handle everything else (images, SVG, PDF, etc.)
-            kitten icat "$file" "$@"
-            ;;
-    esac
-}
 
 # Bat
 alias cat='bat'
 export BAT_THEME="Catppuccin Latte"
 export MANPAGER="sh -c 'awk '\''{ gsub(/\x1B\[[0-9;]*m/, \"\", \$0); gsub(/.\x08/, \"\", \$0); print }'\'' | batcat -p -lman'"
 
-flac2mp3() {
-	find . -type f -name "*.flac" -exec sh -c 'ffmpeg -i "$0" -b:a 320k -map_metadata 0 -id3v2_version 3 "${0%.flac}.mp3" && rm "$0"' {} \;
-}
-
-ogg2mp3() {
-	find . -type f -name "*.ogg" -exec sh -c 'ffmpeg -i "$0" -b:a 320k -map_metadata 0 -id3v2_version 3 "${0%.ogg}.mp3" && rm "$0"' {} \;
-}
-
-aic() {
-  git add .
-  aicommits -g 3
-}
-
-fif() {
-  if [ ! "$#" -gt 0 ]; then echo "Need a string to search for!"; return 1; fi
-  rg --files-with-matches --no-messages "$1" | fzf --preview 'batcat --color=always {}' --preview-window '~3'| xargs $EDITOR
-}
-
-# Navigating to project root
-r () {
-    cd "$(git rev-parse --show-toplevel 2>/dev/null)"
-}
-
-# Remove username & machine from the prompt
-# prompt_context() {
-#   if [[ "$USER" != "$DEFAULT_USER" || -n "$SSH_CLIENT" ]]; then
-#       prompt_segment black default "$COMPUTER_NAME"
-#   fi
-# }
-
-precmd() {
-  if [[ -n "$TMUX" ]]; then
-    tmux rename-window "$(basename "$PWD")"
-  fi
-}
-
-dev() {
-  tmux split-window -h -l 67% \; \
-    split-window -v -l 25% \; \
-    send-keys -t 1 'claude' Enter \; \
-    send-keys -t 2 'nvim .' Enter \; \
-    send-keys -t 3 'git status' Enter \; \
-    select-pane -t 2
-}
-
-thirds() {
-  tmux split-window -h \; \
-  select-pane -R \; \
-  split-window -h \; \
-  select-layout even-horizontal
-}
-
-bwfind() {
-  if [ -z "$1" ]; then
-    echo "Usage: bwfind <search-term>"
-    return 1
-  fi
-
-  if [ -z "$BW_SESSION" ]; then
-    echo "Please unlock Bitwarden first: export BW_SESSION=\$(bw unlock --raw)"
-    return 1
-  fi
-
-  bw list items --search "$1" \
-    | jq -r '["NAME", "USERNAME", "PASSWORD"], (.[] | if .type == 2 then [.name, .notes // "", ""] else [.name, .login.username // "", .login.password // ""] end) | @tsv' \
-    | column -t -s $'\t'
-}
-
-killport() {                                                                                             
-  # Prompt the user for the port number                                                                           
-  read -p "Enter the port number you want to kill: " port                                                         
-                                                                                                                  
-  # Find the process ID (PID) using `ss` and `awk`                                                                
-  pid=$(sudo ss -ltnp | grep ":$port" | awk '{for(i=1;i<=NF;i++) if($i ~ "pid=") print substr($i,5)}')            
-                                                                                                                  
-  # Check if we got a PID                                                                                         
-  if [ ! -z "$pid" ]; then                                                                                        
-    echo "Killing process with PID $pid on port $port"                                                            
-                                                                                                                  
-    # Attempt to kill the process gently with SIGTERM                                                             
-    sudo kill $pid                                                                                                
-                                                                                                                  
-    # If the process does not terminate after some time, force it to close                                        
-    if kill -0 $pid 2>/dev/null; then                                                                             
-      echo "Process did not terminate, forcing it to stop..."                                                     
-      sudo kill -9 $pid                                                                                           
-    fi                                                                                                            
-                                                                                                                  
-    echo "Process killed."                                                                                        
-  else                                                                                                            
-    echo "No process found running on port $port."                                                                
-  fi                                                                                                              
-}          
+# Load custom functions
+if [ -f ~/dotfiles/.zsh_functions ]; then
+  source ~/dotfiles/.zsh_functions
+fi
 
 # enable zoxide
 eval "$(zoxide init zsh)"
