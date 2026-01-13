@@ -96,7 +96,7 @@ alias scripts="cat package.json | jq --color-output '.scripts'"
 # Bat
 alias cat='bat'
 export BAT_THEME="Catppuccin Latte"
-export MANPAGER="sh -c 'awk '\''{ gsub(/\x1B\[[0-9;]*m/, \"\", \$0); gsub(/.\x08/, \"\", \$0); print }'\'' | batcat -p -lman'"
+export MANPAGER="sh -c 'awk '\''{ gsub(/\x1B\[[0-9;]*m/, \"\", \$0); gsub(/.\x08/, \"\", \$0); print }'\'' | bat -p -lman'"
 
 # Load custom functions
 if [ -f ~/dotfiles/.zsh_functions ]; then
