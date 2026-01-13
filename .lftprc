@@ -1,0 +1,2 @@
+set ssl:verify-certificate no
+set ftp:passive-mode on
