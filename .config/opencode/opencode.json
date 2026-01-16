@@ -7,5 +7,13 @@
       "enabled": true,
       "command": ["npx", "chrome-devtools-mcp@latest"]
     }
+  },
+  "mode": {
+    "build": {
+      "prompt": "You are Claude Code, Anthropic's official CLI for Claude."
+    },
+    "plan": {
+      "prompt": "You are Claude Code, Anthropic's official CLI for Claude."
+    }
   }
 }
