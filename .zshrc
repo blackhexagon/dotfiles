@@ -37,6 +37,11 @@ zstyle ':omz:update' frequency 7
 # much, much faster.
 # DISABLE_UNTRACKED_FILES_DIRTY="true"
 
+# Load secret environment variables (before plugins so tmux has access)
+if [ -f ~/.env ]; then
+    source ~/.env
+fi
+
 # Which plugins would you like to load?
 # Standard plugins can be found in $ZSH/plugins/
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
@@ -59,11 +64,6 @@ plugins=(
   gcloud
   you-should-use
 )
-
-# Load secret environment variables
-if [ -f ~/.env ]; then
-    source ~/.env
-fi
 
 # create .zcompdump files in cache file, not in home
 export ZSH_COMPDUMP=$ZSH/cache/.zcompdump-$HOST

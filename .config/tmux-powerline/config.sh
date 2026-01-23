@@ -121,7 +121,7 @@ export TMUX_POWERLINE_SEG_GCALCLI_24HR_TIME_FORMAT="1"
 
 # github_notifications.sh {
 # Github token (https://github.com/settings/tokens) with at least "notifications" scope
-export TMUX_POWERLINE_SEG_GITHUB_NOTIFICATIONS_TOKEN=""
+export TMUX_POWERLINE_SEG_GITHUB_NOTIFICATIONS_TOKEN="${GITHUB_NOTIFICATION_TOKEN}"
 # Include available notification reasons (https://docs.github.com/en/rest/activity/notifications?apiVersion=2022-11-28#about-notification-reasons),
 # in the format "REASON:SEPARATOR"
 # export TMUX_POWERLINE_SEG_GITHUB_NOTIFICATIONS_REASONS="approval_requested:-󰴄 |assign:-󰎔 |author:-󰔗 |comment:- |ci_activity:-󰙨 |invitation:- |manual:-󱥃 |mention:- |review_requested:- |security_alert:-󰒃 |state_change:-󱇯 |subscribed:- |team_mention:- "
@@ -130,9 +130,9 @@ export TMUX_POWERLINE_SEG_GITHUB_NOTIFICATIONS_TOKEN=""
 # Use symbol mode (ignored if you set TMUX_POWERLINE_SEG_GITHUB_NOTIFICATIONS_REASONS yourself)
 # export TMUX_POWERLINE_SEG_GITHUB_NOTIFICATIONS_SYMBOL_MODE="yes"
 # Summarize all notifications
-# export TMUX_POWERLINE_SEG_GITHUB_NOTIFICATIONS_SUMMARIZE="no"
+export TMUX_POWERLINE_SEG_GITHUB_NOTIFICATIONS_SUMMARIZE="yes"
 # Hide if no notifications
-# export TMUX_POWERLINE_SEG_GITHUB_NOTIFICATIONS_HIDE_NO_NOTIFICATIONS="yes"
+export TMUX_POWERLINE_SEG_GITHUB_NOTIFICATIONS_HIDE_NO_NOTIFICATIONS="no"
 # Only show new notifications since date (default: today) (takes up to UPDATE_INTERVAL time to take effect)
 # export TMUX_POWERLINE_SEG_GITHUB_NOTIFICATIONS_SINCE="$(date +%Y-%m-%dT00:00:00Z)"
 # Enable show only notifications since date (takes up to UPDATE_INTERVAL time to take effect)
@@ -200,11 +200,11 @@ export TMUX_POWERLINE_SEG_LAN_IP_SYMBOL="ⓛ "
 
 # mailcount.sh {
 # Mailbox type to use. Can be any of {apple_mail, gmail, maildir, mbox, mailcheck}
-export TMUX_POWERLINE_SEG_MAILCOUNT_MAILBOX_TYPE=""
+export TMUX_POWERLINE_SEG_MAILCOUNT_MAILBOX_TYPE="gmail"
 
 ## Gmail
 # Enter your Gmail username here WITH OUT @gmail.com.( OR @domain)
-export TMUX_POWERLINE_SEG_MAILCOUNT_GMAIL_USERNAME=""
+export TMUX_POWERLINE_SEG_MAILCOUNT_GMAIL_USERNAME="matous.trca"
 # Google password. Recomenned to use application specific password (https://accounts.google.com/b/0/IssuedAuthSubTokens) Leave this empty to get password from OS X keychain.
 # For macOS users : MAKE SURE that you add a key to the keychain in the format as follows
 # Keychain Item name : http://<value-you-fill-in-server-variable-below>
@@ -345,7 +345,7 @@ export TMUX_POWERLINE_SEG_TMUX_CONTINUUM_PREFIX="Continuum status: "
 # tmux_mem_cpu_load.sh {
 # Arguments passed to tmux-mem-cpu-load.
 # See https://github.com/thewtex/tmux-mem-cpu-load for all available options.
-export TMUX_POWERLINE_SEG_TMUX_MEM_CPU_LOAD_ARGS="-g 0"
+export TMUX_POWERLINE_SEG_TMUX_MEM_CPU_LOAD_ARGS="-m 1 -a 0 -g 0"
 # }
 
 # tmux_session_info.sh {

@@ -34,6 +34,8 @@ TMUX_POWERLINE_SEPARATOR_LEFT_BOLD=""
 TMUX_POWERLINE_SEPARATOR_LEFT_THIN=""
 TMUX_POWERLINE_SEPARATOR_RIGHT_BOLD=""
 TMUX_POWERLINE_SEPARATOR_RIGHT_THIN=""
+TMUX_POWERLINE_SEPARATOR_LEFT_ROUND=""
+TMUX_POWERLINE_SEPARATOR_RIGHT_ROUND=""
 TMUX_POWERLINE_SEPARATOR_THIN="|"
 
 # See Color formatting section below for details on what colors can be used here.
@@ -128,7 +130,8 @@ if [ -z "$TMUX_POWERLINE_LEFT_STATUS_SEGMENTS" ]; then
     # "ifstat 30 255"
     #"ifstat_sys 30 255"
     # "lan_ip $sky $base"
-    "wan_ip $sky $base"
+    # "wan_ip $sky $base"
+    "github_notifications $sky $base $TMUX_POWERLINE_SEPARATOR_RIGHT_ROUND"
     # "vcs_branch $overlay2 $crust"
     # "air ${TMUX_POWERLINE_SEG_AIR_COLOR} $base"
     #"vcs_compare 60 255"
