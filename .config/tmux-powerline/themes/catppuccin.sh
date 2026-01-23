@@ -147,7 +147,7 @@ if [ -z "$TMUX_POWERLINE_RIGHT_STATUS_SEGMENTS" ]; then
     # "earthquake 3 0"
     # "pwd $mauve $surface0"
     #"macos_notification_count 29 255"
-    # "mailcount 9 255"
+    "mailcount 9 255"
     # "cpu $rosewater $crust"
     # "load 237 167"
     "tmux_mem_cpu_load $rosewater $crust"

@@ -132,7 +132,7 @@ export TMUX_POWERLINE_SEG_GITHUB_NOTIFICATIONS_TOKEN="${GITHUB_NOTIFICATION_TOKE
 # Summarize all notifications
 export TMUX_POWERLINE_SEG_GITHUB_NOTIFICATIONS_SUMMARIZE="yes"
 # Hide if no notifications
-export TMUX_POWERLINE_SEG_GITHUB_NOTIFICATIONS_HIDE_NO_NOTIFICATIONS="no"
+export TMUX_POWERLINE_SEG_GITHUB_NOTIFICATIONS_HIDE_NO_NOTIFICATIONS="yes"
 # Only show new notifications since date (default: today) (takes up to UPDATE_INTERVAL time to take effect)
 # export TMUX_POWERLINE_SEG_GITHUB_NOTIFICATIONS_SINCE="$(date +%Y-%m-%dT00:00:00Z)"
 # Enable show only notifications since date (takes up to UPDATE_INTERVAL time to take effect)
@@ -211,11 +211,11 @@ export TMUX_POWERLINE_SEG_MAILCOUNT_GMAIL_USERNAME="matous.trca"
 # Account name : <username-below>@<server-below>
 # Password : Your password ( Once again, try to use 2 step-verification and application-specific password)
 # See http://support.google.com/accounts/bin/answer.py?hl=en&answer=185833 for more info.
-export TMUX_POWERLINE_SEG_MAILCOUNT_GMAIL_PASSWORD=""
+export TMUX_POWERLINE_SEG_MAILCOUNT_GMAIL_PASSWORD="${GMAIL_APP_PASSWORD}"
 # Domain name that will complete your email. For normal GMail users it probably is "gmail.com but can be "foo.tld" for Google Apps users.
 export TMUX_POWERLINE_SEG_MAILCOUNT_GMAIL_SERVER="gmail.com"
 # How often in minutes to check for new mails.
-export TMUX_POWERLINE_SEG_MAILCOUNT_GMAIL_INTERVAL="5"
+export TMUX_POWERLINE_SEG_MAILCOUNT_GMAIL_INTERVAL="2"
 
 ## Maildir
 # Path to the maildir to check.
