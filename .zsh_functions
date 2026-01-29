@@ -160,7 +160,7 @@ bwftp() {
   local host=$(echo "$uri" | sed -E 's|^[a-zA-Z]+://||' | sed -E 's|/.*$||')
 
   # Construct lftp command
-  local lftp_cmd="lftp -u ${username},${password} ftp://${host}"
+  local lftp_cmd="lftp -u ${username},${password} ftp://${host} -e \"set ssl:verify-certificate no\""
 
   # Display command with masked password
   echo "Executing: lftp -u ${username},*** ftp://${host}"
