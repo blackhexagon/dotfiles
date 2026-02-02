@@ -16,6 +16,12 @@
       "enabled": true
     }
   },
+  "formatter": {
+    "php-cs-fixer": {
+      "command": ["ddev", "exec", "vendor/bin/php-cs-fixer", "fix", "$FILE"],
+      "extensions": [".php"]
+    }
+  },
   "mode": {
     "build": {
       "prompt": "You are Claude Code, Anthropic's official CLI for Claude."
