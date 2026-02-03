@@ -2,6 +2,13 @@
   "$schema": "https://opencode.ai/config.json",
   "theme": "catppuccin",
   "mcp": {
+    "garth-garmin-connect": {
+      "type": "local",
+      "command": ["uvx", "garth-mcp-server"],
+      "environment": {
+        "GARTH_TOKEN": "{env:GARTH_TOKEN}"
+      }
+    },
     "chrome-devtools": {
       "type": "local",
       "enabled": true,
