@@ -42,6 +42,15 @@ thirds() {
   select-layout even-horizontal
 }
 
+icat() {
+  if [ -z "$1" ]; then
+    echo "Usage: icat <search-term>"
+    return 1
+  fi
+
+   chafa --format=kitty --passthrough=tmux "$1"
+ }
+
 # Search Bitwarden and display items in a table
 bwfind() {
   if [ -z "$1" ]; then

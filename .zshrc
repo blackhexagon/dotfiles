@@ -90,7 +90,6 @@ alias lzd='lazydocker'
 alias ll='eza --long --header --git --icons --all --group-directories-first --time-style=relative'
 alias tree='eza --header --git --icons --long --header --tree --level 2 -a --group-directories-first'
 alias treegnore='eza --header --git --icons --long --header --tree --level 2 -a --group-directories-first -I=.git --git-ignore'
-alias gdd="~/scripts/goodday.sh"
 alias scripts="cat package.json | jq --color-output '.scripts'"
 
 # Bat
