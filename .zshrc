@@ -5,10 +5,14 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-# Activate mise (version manager for node, python, pnpm, etc.)
-eval "$(mise activate zsh)"
+# Ensure system binaries are in PATH first
+export PATH="/usr/bin:/usr/local/go/bin:/snap/bin:/home/u2b22/.local/bin:$HOME/bin:$PATH"
 
-export PATH="$PATH:/usr/bin:/usr/local/go/bin:/snap/bin:/home/u2b22/.local/bin:$HOME/bin"
+# Activate mise (version manager for node, python, pnpm, etc.)
+if [[ -d "$PWD" ]]; then
+  eval "$(mise activate zsh)"
+fi
+
 export ZSH="$HOME/.oh-my-zsh"
 export EDITOR="nvim"
 export FZF_DEFAULT_OPTS=" \

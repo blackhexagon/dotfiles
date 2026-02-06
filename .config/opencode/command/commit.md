@@ -1,7 +1,7 @@
 ---
 description: Git commit
 agent: build
-model: anthropic/claude-sonnet-4-5
+model: openai/gpt-5.2-codex
 ---
 
 Review the staged changes and create a suitable commit message. Follow these steps:
