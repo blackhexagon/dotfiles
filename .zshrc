@@ -5,6 +5,9 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+# Activate mise (version manager for node, python, pnpm, etc.)
+eval "$(mise activate zsh)"
+
 export PATH="$PATH:/usr/bin:/usr/local/go/bin:/snap/bin:/home/u2b22/.local/bin:$HOME/bin"
 export ZSH="$HOME/.oh-my-zsh"
 export EDITOR="nvim"
@@ -51,8 +54,6 @@ fi
 plugins=(
   git
   gh
-  nvm
-  npm
   git-open
   web-search
   fzf
@@ -106,10 +107,6 @@ fi
 eval "$(zoxide init zsh)"
 
 # source /usr/share/nvm/init-nvm.sh
-
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
