@@ -1,3 +1,4 @@
+.config/tmux/plugins/*
 .config/github-copilot
 .config/astro
 .config/btop
