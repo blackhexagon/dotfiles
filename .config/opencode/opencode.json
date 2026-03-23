@@ -5,14 +5,19 @@
     "garth-garmin-connect": {
       "type": "local",
       "command": ["uvx", "garth-mcp-server"],
+      "enabled": false,
       "environment": {
         "GARTH_TOKEN": "{env:GARTH_TOKEN}"
       }
     },
     "chrome-devtools": {
       "type": "local",
-      "enabled": true,
+      "enabled": false,
       "command": ["npx", "chrome-devtools-mcp@latest"]
+    },
+    "nette-inspector": {
+      "type": "local",
+      "command": ["ddev", "php", "vendor/bin/mcp-inspector"]
     },
     "context7": {
       "type": "remote",
