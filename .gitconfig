@@ -13,14 +13,13 @@
 	excludesfile = ~/.gitignore_global
 	pager = delta
 [delta]
-    navigate = true    # use n and N to move between diff sections
-    light = true
+  navigate = true
+  light = true
 [merge]
-    conflictstyle = diff3
-
+  conflictstyle = diff3
 [diff]
-    colorMoved = default
+  colorMoved = default
 [pull]
-	rebase = false
+	rebase = true
 [coderabbit]
 	machineId = cli/781586070dd7421780f89fce6ea10686

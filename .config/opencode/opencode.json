@@ -1,6 +1,11 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "autoupdate": false,
+  "permission": {
+    "external_directory": {
+      "~/Work/**": "allow"
+    }
+  },
   "mcp": {
     "garth-garmin-connect": {
       "type": "local",
