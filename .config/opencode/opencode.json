@@ -6,7 +6,13 @@
       "~/Work/**": "allow"
     }
   },
+  "plugin": ["opencode-claude-auth"],
   "mcp": {
+    "next-devtools": {
+      "type": "local",
+      "enabled": false,
+      "command": ["npx", "-y", "next-devtools-mcp@latest"]
+    },
     "garth-garmin-connect": {
       "type": "local",
       "command": ["uvx", "garth-mcp-server"],
