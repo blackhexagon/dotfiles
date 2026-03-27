@@ -20,23 +20,6 @@
       "environment": {
         "GARTH_TOKEN": "{env:GARTH_TOKEN}"
       }
-    },
-    "chrome-devtools": {
-      "type": "local",
-      "enabled": false,
-      "command": ["npx", "chrome-devtools-mcp@latest"]
-    },
-    "nette-inspector": {
-      "type": "local",
-      "command": ["ddev", "php", "vendor/bin/mcp-inspector"]
-    },
-    "context7": {
-      "type": "remote",
-      "url": "https://mcp.context7.com/mcp",
-      "headers": {
-        "CONTEXT7_API_KEY": "{env:CONTEXT7_API_KEY}"
-      },
-      "enabled": true
     }
   },
   "formatter": {
