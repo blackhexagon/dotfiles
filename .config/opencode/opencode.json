@@ -6,7 +6,10 @@
       "~/Work/**": "allow"
     }
   },
-  "plugin": ["opencode-claude-auth", "opencode-anthropic-auth"],
+  "plugin": ["opencode-claude-auth"],
+  "provider": {
+    "anthropic": {}
+  },
   "mcp": {
     "next-devtools": {
       "type": "local",
