@@ -1,6 +1,0 @@
-matches:
-  - triggers: [":mail", ":email"]
-    replace: "matous.trca@gmail.com"
-    
-  - trigger: ":name"
-    replace: "Matouš Trča"
