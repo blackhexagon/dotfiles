@@ -97,6 +97,9 @@ alias tree='eza --header --git --icons --long --header --tree --level 2 -a --gro
 alias treegnore='eza --header --git --icons --long --header --tree --level 2 -a --group-directories-first -I=.git --git-ignore'
 alias scripts="cat package.json | jq --color-output '.scripts'"
 
+alias laptop-off='hyprctl keyword monitor eDP-1,disable,auto,auto'
+alias laptop-on='hyprctl keyword monitor eDP-1,preferred,auto,auto'
+
 # Bat
 alias cat='bat'
 export BAT_THEME="Catppuccin Latte"
