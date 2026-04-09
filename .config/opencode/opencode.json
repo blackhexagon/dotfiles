@@ -6,11 +6,28 @@
       "~/Work/**": "allow"
     }
   },
+  "mode": {
+    "plan": {
+      "prompt": "You are Claude Code, Anthropic's official CLI for Claude."
+    },
+    "build": {
+      "prompt": "You are Claude Code, Anthropic's official CLI for Claude."
+    }
+  },
   "plugin": ["opencode-claude-auth"],
   "provider": {
     "anthropic": {}
   },
   "mcp": {
+    "figma": {
+      "enabled": false,
+      "type": "remote",
+      "url": "https://mcp.figma.com/mcp",
+      "oauth": {
+        "clientId": "{env:FIGMA_CLIENT_ID}",
+        "clientSecret": "{env:FIGMA_CLIENT_SECRET}"
+      }
+    },
     "next-devtools": {
       "type": "local",
       "enabled": false,
