@@ -1,4 +1,5 @@
 # Dynamic theme colors
+
 config-file = ?"~/.config/omarchy/current/theme/ghostty.conf"
 
 # Font
@@ -16,7 +17,7 @@ gtk-toolbar-style = flat
 
 # Cursor styling
 cursor-style = "block"
-cursor-style-blink = false
+cursor-style-blink = true
 
 # Cursor styling + SSH session terminfo
 # (all shell integration options must be passed together)
@@ -35,3 +36,5 @@ mouse-scroll-multiplier = 0.95
 
 # Fix general slowness on hyprland (https://github.com/ghostty-org/ghostty/discussions/3224)
 async-backend = epoll
+custom-shader = ~/.config/ghostty/shaders/cursor_tail.glsl
+custom-shader-animation = always
