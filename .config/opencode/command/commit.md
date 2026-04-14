@@ -1,7 +1,7 @@
 ---
 description: Git commit
 agent: build
-model: openai/gpt-5.2-codex
+model: openai/gpt-5.3-codex
 ---
 
 Review the staged changes and create a suitable commit message. Follow these steps:

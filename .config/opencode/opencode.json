@@ -6,7 +6,7 @@
       "~/Work/**": "allow"
     }
   },
-  "plugin": ["@ex-machina/opencode-anthropic-auth@1.6.1"],
+  "plugin": ["opencode-claude-auth"],
   "provider": {
     "anthropic": {}
   },
