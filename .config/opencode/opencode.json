@@ -6,15 +6,7 @@
       "~/Work/**": "allow"
     }
   },
-  "mode": {
-    "plan": {
-      "prompt": "You are Claude Code, Anthropic's official CLI for Claude."
-    },
-    "build": {
-      "prompt": "You are Claude Code, Anthropic's official CLI for Claude."
-    }
-  },
-  "plugin": ["opencode-claude-auth"],
+  "plugin": ["@ex-machina/opencode-anthropic-auth@1.6.1"],
   "provider": {
     "anthropic": {}
   },
