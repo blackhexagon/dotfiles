@@ -1,6 +1,6 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "autoupdate": true,
+  "autoupdate": false,
   "permission": {
     "external_directory": {
       "~/Work/**": "allow"
@@ -12,7 +12,7 @@
   },
   "mcp": {
     "figma": {
-      "enabled": false,
+      "enabled": true,
       "type": "remote",
       "url": "https://mcp.figma.com/mcp",
       "oauth": {
