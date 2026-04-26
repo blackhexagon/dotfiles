@@ -226,28 +226,22 @@ bwfind() {
 
 # Kill process running on a specific port
 killport() {
-  # Prompt the user for the port number
-  read -p "Enter the port number you want to kill: " port
+  # Get port from argument or prompt
+  local port=$1
+  if [ -z  $port ]; then
+    read -p  Enter the port number you want to kill:  port
+  fi
 
-  # Find the process ID (PID) using `ss` and `awk`
-  pid=$(sudo ss -ltnp | grep ":$port" | awk '{for(i=1;i<=NF;i++) if($i ~ "pid=") print substr($i,5)}')
-
-# Check if we got a PID
-  if [ ! -z "$pid" ]; then
-    echo "Killing process with PID $pid on port $port"
-
-    # Attempt to kill the process gently with SIGTERM
-    sudo kill $pid
-
-    # If the process does not terminate after some time, force it to close
-    if kill -0 $pid 2>/dev/null; then
-      echo "Process did not terminate, forcing it to stop..."
-      sudo kill -9 $pid
+  # Use fuser to kill all processes on the port
+  if sudo fuser -k $port/tcp 2>/dev/null; then
+    sleep 1
+    if sudo fuser $port/tcp 2>/dev/null | grep -q .; then
+      echo  Process did not terminate, forcing it to stop...
+      sudo fuser -k -9 $port/tcp 2>/dev/null
     fi
-
-    echo "Process killed."
+    echo  Process killed.
   else
-    echo "No process found running on port $port."
+    echo  No process found running on port $port.
   fi
 }
 
