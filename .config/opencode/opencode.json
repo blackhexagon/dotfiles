@@ -6,7 +6,7 @@
       "~/Work/**": "allow"
     }
   },
-  "plugin": ["opencode-claude-auth"],
+  "plugin": ["opencode-claude-auth", "opencode-wakatime"],
   "provider": {
     "anthropic": {}
   },
