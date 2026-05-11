@@ -1,0 +1,7 @@
+[[station]]
+name = "Rádio 1"
+url = "http://icecast6.play.cz/radio1-128.mp3"
+country = "Czechia"
+codec = "MP3"
+tags = "r&b/urban"
+homepage = "https://www.radio1.cz/"
