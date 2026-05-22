@@ -4,9 +4,10 @@
   "position": "top",
   "spacing": 0,
   "height": 26,
-  "modules-left": ["custom/omarchy", "hyprland/workspaces", "custom/uair"],
+  "modules-left": ["custom/omarchy", "hyprland/workspaces"],
   "modules-center": [
     "clock",
+    "custom/uair",
     "custom/weather",
     "custom/update",
     "custom/voxtype",
@@ -184,12 +185,11 @@
     "on-click": "omarchy-voxtype-model",
   },
   "custom/uair": {
-    "exec": "while true; do uairctl fetch '{\"text\":\"{name} {time}\",\"class\":\"{state}\",\"percentage\":{percent}}'; echo; sleep 1; done",
+    "exec": "while true; do uairctl fetch '{name}|{time}|{state}' | awk -F'|' '{ name=$1; time=$2; state=$3; if (name ~ /^Long/) { kind=\"long\"; icon=\"󰒲\" } else if (name ~ /^Break/) { kind=\"short\"; icon=\"󰅶\" } else { kind=\"work\"; icon=\"󰃭\" } if (state==\"paused\") { kind=\"paused\"; icon=\"󰏤\" } printf \"{\\\"text\\\":\\\"%s %s %s\\\",\\\"class\\\":\\\"%s\\\",\\\"tooltip\\\":\\\"%s (%s)\\\"}\\n\", icon, name, time, kind, name, state }'; sleep 1; done",
     "return-type": "json",
     "tooltip": true,
     "on-click": "uairctl toggle",
-    "on-click-middle": "uairctl prev",
-    "on-click-right": "uairctl next",
+    "on-click-right": "uairctl jump work1",
     "exec-if": "which uairctl",
   },
   "tray": {

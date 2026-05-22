@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# Launch the Pomodoro break lockscreen.
+#
+# Lifecycle:
+#   - End of work session: uair fires this script.
+#   - Break runs; the lockscreen shows the live countdown.
+#   - End of break: uair fires `uairctl pause` (in its session command),
+#     which loads the next work session in paused state. The lockscreen
+#     stays up, hint text swaps to "Break over — type password".
+#   - User authenticates → hyprlock exits → this script runs
+#     `uairctl resume` to start the next work session.
+#
+# Side effects:
+#   - Pauses all media players for the duration of the break.
+#   - Suppresses the omarchy screensaver so it does not race with hyprlock.
+#   - Resumes media after the lock dies.
+
+set -u
+
+# Don't double-spawn if a hyprlock is already running (e.g. system lock).
+if pidof -x hyprlock >/dev/null; then
+  exit 0
+fi
+
+# Stop the omarchy screensaver so it doesn't try to spawn behind us.
+pkill -f org.omarchy.screensaver 2>/dev/null || true
+
+# Pause any active media for the duration of the break.
+playerctl --all-players pause 2>/dev/null || true
+
+# Run hyprlock in the foreground; it returns when the user authenticates.
+hyprlock --config "$HOME/.config/hypr/hyprlock-break.conf" --no-fade-in
+
+# User successfully unlocked. Resume the next work session (uair was
+# paused by the end-of-break hook). If uair is already resumed (e.g.
+# the user pre-pressed play somehow), this is a no-op.
+uairctl resume 2>/dev/null || true
+
+# Resume media.
+playerctl --all-players play 2>/dev/null || true

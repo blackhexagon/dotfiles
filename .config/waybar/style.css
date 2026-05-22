@@ -112,4 +112,9 @@ tooltip {
 
 #custom-uair {
   margin: 0 7.5px;
+  font-weight: bold;
+}
+
+#custom-uair.paused {
+  opacity: 0.5;
 }
