@@ -24,3 +24,6 @@ alias cat='bat -pp'
 alias scripts="cat package.json | jq --color-output '.scripts'"
 alias laptop-off='hyprctl keyword monitor eDP-1,disable,auto,auto'
 alias laptop-on='hyprctl keyword monitor eDP-1,preferred,auto,auto'
+
+# opencode
+export PATH=/home/u2b22/.opencode/bin:$PATH
