@@ -7,7 +7,7 @@
   border: none;
   border-radius: 0;
   min-height: 0;
-  font-family: 'JetBrainsMono Nerd Font';
+  font-family: "JetBrainsMono Nerd Font";
   font-size: 12px;
 }
 
@@ -108,4 +108,8 @@ tooltip {
 
 #custom-voxtype.recording {
   color: #a55555;
+}
+
+#custom-uair {
+  margin: 0 7.5px;
 }
