@@ -89,9 +89,9 @@ source $ZSH/oh-my-zsh.sh
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
 # For a full list of active aliases, run `alias`.
-alias vi="nvim ."
 alias zshconf="$EDITOR ~/.zshrc"
 alias lzd='lazydocker'
+alias vi="nvim ."
 alias ll='eza --long --header --git --icons --all --group-directories-first --time-style=relative'
 alias tree='eza --header --git --icons --long --header --tree --level 2 -a --group-directories-first'
 alias treegnore='eza --header --git --icons --long --header --tree --level 2 -a --group-directories-first -I=.git --git-ignore'
