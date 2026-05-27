@@ -20,8 +20,8 @@ aic() {
 
   local response final_json messages selection
   response=$(opencode run \
-    "Suggest three concise commit messages for the current git status and staged git diff. Return only JSON in this exact shape: {\"commitMessages\":[\"message one\",\"message two\",\"message three\"]}" \
-    --model="openai/gpt-5.5" \
+    "Review the staged git changes and suggest three concise commit messages. First inspect git status, git diff --staged, and git log --oneline -5. If needed, inspect key changed files for context. Prefer conventional commit format when it fits the repository history. Focus on why the change was made, not just what changed. Return only valid JSON with no markdown or commentary in this exact shape: {\"commitMessages\":[\"message one\",\"message two\",\"message three\"]}" \
+    --model="openai/gpt-5.5-fast" \
     --agent="plan" \
     --format="json") || return 1
 
