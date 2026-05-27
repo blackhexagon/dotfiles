@@ -1,6 +1,95 @@
 aic() {
-  git add .
-  aicommits -g 3
+  if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    echo "Not inside a git repository"
+    return 1
+  fi
+
+  for tool in opencode jq fzf; do
+    if ! command -v "$tool" >/dev/null 2>&1; then
+      echo "$tool is required"
+      return 1
+    fi
+  done
+
+  git add . || return 1
+
+  if git diff --cached --quiet; then
+    echo "No staged changes"
+    return 0
+  fi
+
+  local response final_json messages selection
+  response=$(opencode run \
+    "Suggest three concise commit messages for the current git status and staged git diff. Return only JSON in this exact shape: {\"commitMessages\":[\"message one\",\"message two\",\"message three\"]}" \
+    --model="openai/gpt-5.5" \
+    --agent="plan" \
+    --format="json") || return 1
+
+  final_json=$(printf "%s\n" "$response" | jq -rs -r 'map(select(.type == "text") | .part.text) | last // empty')
+
+  if [ -z "$final_json" ]; then
+    echo "Failed to find commit messages in opencode output"
+    return 1
+  fi
+
+  messages=$(printf "%s\n" "$final_json" | jq -r '.commitMessages[]') || {
+    echo "Failed to parse commit messages"
+    return 1
+  }
+
+  if [ -z "$messages" ]; then
+    echo "No commit messages returned"
+    return 1
+  fi
+
+  selection=$(printf "%s\n" "$messages" | fzf --prompt="commit message> " --height=40% --reverse --no-multi)
+
+  if [ -z "$selection" ]; then
+    echo "No commit message selected"
+    return 1
+  fi
+
+  git commit -m "$selection"
+}
+
+# Print the current branch name, or short SHA if detached (oh-my-zsh parity)
+git_current_branch() {
+  local ref
+  ref=$(git symbolic-ref --quiet HEAD 2>/dev/null)
+  local ret=$?
+  if [ $ret -ne 0 ]; then
+    [ $ret -eq 128 ] && return  # not a git repo
+    ref=$(git rev-parse --short HEAD 2>/dev/null) || return
+  fi
+  echo "${ref#refs/heads/}"
+}
+
+# Print the main branch name (oh-my-zsh parity)
+git_main_branch() {
+  command git rev-parse --git-dir &>/dev/null || return
+  local ref
+  for ref in refs/{heads,remotes/{origin,upstream}}/{main,trunk,mainline,default,stable,master}; do
+    if command git show-ref -q --verify "$ref"; then
+      echo "${ref##*/}"
+      return 0
+    fi
+  done
+  echo master
+  return 1
+}
+
+# Print the develop branch name (oh-my-zsh parity)
+git_develop_branch() {
+  command git rev-parse --git-dir &>/dev/null || return
+  local branch
+  for branch in dev devel develop development; do
+    if command git show-ref -q --verify "refs/heads/$branch"; then
+      echo "$branch"
+      return 0
+    fi
+  done
+  echo develop
+  return 1
 }
 
 # Navigate to project root

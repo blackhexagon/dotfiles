@@ -24,6 +24,10 @@ alias grhh='git reset --hard'
 alias gsb='git status --short --branch'
 alias gcan!='git commit --verbose --all --no-edit --amend'
 alias glog='git log --oneline --decorate --graph'
+alias ggpull='git pull origin "$(git_current_branch)"'
+alias ggpush='git push origin "$(git_current_branch)"'
+alias gcm='git checkout "$(git_main_branch)"'
+alias gcd='git checkout "$(git_develop_branch)"'
 
 killport() {
   # Get port from argument or prompt
