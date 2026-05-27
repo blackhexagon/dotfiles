@@ -18,12 +18,31 @@ aic() {
     return 0
   fi
 
-  local response final_json messages selection
+  local response final_json messages selection spinner_pid
+  (
+    while true; do
+      for frame in '|' '/' '-' '\'; do
+        printf '\r%s Generating commit messages...' "$frame" >&2
+        sleep 0.1
+      done
+    done
+  ) &
+  spinner_pid=$!
+
   response=$(opencode run \
     "Review the staged git changes and suggest three concise commit messages. First inspect git status, git diff --staged, and git log --oneline -5. If needed, inspect key changed files for context. Prefer conventional commit format when it fits the repository history. Focus on why the change was made, not just what changed. Return only valid JSON with no markdown or commentary in this exact shape: {\"commitMessages\":[\"message one\",\"message two\",\"message three\"]}" \
     --model="openai/gpt-5.5-fast" \
     --agent="plan" \
-    --format="json") || return 1
+    --format="json")
+  local opencode_status=$?
+
+  kill "$spinner_pid" 2>/dev/null
+  wait "$spinner_pid" 2>/dev/null
+  printf '\r%s\r' "$(printf '%*s' 32 '')" >&2
+
+  if [ $opencode_status -ne 0 ]; then
+    return $opencode_status
+  fi
 
   final_json=$(printf "%s\n" "$response" | jq -rs -r 'map(select(.type == "text") | .part.text) | last // empty')
 
@@ -58,7 +77,7 @@ git_current_branch() {
   ref=$(git symbolic-ref --quiet HEAD 2>/dev/null)
   local ret=$?
   if [ $ret -ne 0 ]; then
-    [ $ret -eq 128 ] && return  # not a git repo
+    [ $ret -eq 128 ] && return # not a git repo
     ref=$(git rev-parse --short HEAD 2>/dev/null) || return
   fi
   echo "${ref#refs/heads/}"
