@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# Show uair pomodoro status for the tmux status bar.
+# Icons match the waybar custom/uair module.
+
+data=$(uairctl fetch '{name}|{time}|{state}' 2>/dev/null) || exit 0
+
+IFS='|' read -r name time state <<< "$data"
+
+if [[ "$name" == Long* ]]; then
+  icon="󰒲"
+elif [[ "$name" == Break* ]]; then
+  icon="󰅶"
+else
+  icon="󰃭"
+fi
+
+if [[ "$state" == "paused" ]]; then
+  echo "#[dim]󰏤 ${name} ${time}#[nodim]"
+else
+  echo "${icon} ${name} ${time}"
+fi
