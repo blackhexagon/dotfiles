@@ -71,6 +71,42 @@ aic() {
   git commit -m "$selection"
 }
 
+# Push the current branch and watch the latest GitHub Actions run for it
+gpw() {
+  if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    echo "Not inside a git repository"
+    return 1
+  fi
+
+  if ! command -v gh >/dev/null 2>&1; then
+    echo "gh is required"
+    return 1
+  fi
+
+  local branch run_id
+  branch=$(git branch --show-current) || return 1
+
+  if [ -z "$branch" ]; then
+    echo "Detached HEAD; no branch to push"
+    return 1
+  fi
+
+  git push -u origin "$branch" || return 1
+
+  for _ in 1 2 3 4 5; do
+    run_id=$(gh run list --branch "$branch" --limit 1 --json databaseId --jq '.[0].databaseId')
+
+    if [ -n "$run_id" ]; then
+      gh run watch "$run_id"
+      return
+    fi
+
+    sleep 2
+  done
+
+  echo "No GitHub Actions run found for $branch."
+}
+
 # Print the current branch name, or short SHA if detached (oh-my-zsh parity)
 git_current_branch() {
   local ref

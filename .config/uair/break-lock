@@ -35,6 +35,3 @@ hyprlock --config "$HOME/.config/hypr/hyprlock-break.conf" --no-fade-in
 # paused by the end-of-break hook). If uair is already resumed (e.g.
 # the user pre-pressed play somehow), this is a no-op.
 uairctl resume 2>/dev/null || true
-
-# Resume media.
-playerctl --all-players play 2>/dev/null || true
