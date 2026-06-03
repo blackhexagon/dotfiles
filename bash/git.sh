@@ -83,7 +83,7 @@ gpw() {
     return 1
   fi
 
-  local branch run_id
+  local branch sha run_id
   branch=$(git branch --show-current) || return 1
 
   if [ -z "$branch" ]; then
@@ -91,10 +91,12 @@ gpw() {
     return 1
   fi
 
+  sha=$(git rev-parse HEAD) || return 1
+
   git push -u origin "$branch" || return 1
 
-  for _ in 1 2 3 4 5; do
-    run_id=$(gh run list --branch "$branch" --limit 1 --json databaseId --jq '.[0].databaseId')
+  for _ in 1 2 3 4 5 6 7 8 9 10; do
+    run_id=$(gh run list --branch "$branch" --commit "$sha" --limit 1 --json databaseId --jq '.[0].databaseId')
 
     if [ -n "$run_id" ]; then
       gh run watch "$run_id"
@@ -104,7 +106,7 @@ gpw() {
     sleep 2
   done
 
-  echo "No GitHub Actions run found for $branch."
+  echo "No GitHub Actions run found for $branch at $sha."
 }
 
 # Print the current branch name, or short SHA if detached (oh-my-zsh parity)
