@@ -1,5 +1,5 @@
 # If not running interactively, don't do anything (leave this at the top of this file)
-[[ $- != *i* ]] && return
+[[ $- == *i* ]] && source -- /usr/share/blesh/ble.sh --attach=none
 
 # All the default Omarchy aliases and functions
 # (don't mess with these directly, just overwrite them here!)
@@ -56,3 +56,5 @@ fif() {
   fi
   rg --files-with-matches --no-messages "$1" | fzf --preview 'bat -pp --color=always {}' --preview-window '~3' | xargs $EDITOR
 }
+
+[[ ! ${BLE_VERSION-} ]] || ble-attach
