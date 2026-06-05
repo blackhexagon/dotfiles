@@ -14,7 +14,14 @@
     "sentry": {
       "type": "remote",
       "url": "https://mcp.sentry.dev/mcp",
-      "oauth": {}
+      "oauth": {},
+      "enabled": false
+    },
+    "fakturoid": {
+      "type": "remote",
+      "url": "https://app.fakturoid.cz/mcp/v1",
+      "oauth": {},
+      "enabled": false
     },
     "figma": {
       "enabled": true,
