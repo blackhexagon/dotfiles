@@ -11,6 +11,14 @@
     "anthropic": {}
   },
   "mcp": {
+    "anki-mcp": {
+      "type": "local",
+      "enabled": false,
+      "command": ["npx", "-y", "@ankimcp/anki-mcp-server", "--stdio"],
+      "environment": {
+        "ANKI_CONNECT_URL": "http://localhost:8765"
+      }
+    },
     "sentry": {
       "type": "remote",
       "url": "https://mcp.sentry.dev/mcp",

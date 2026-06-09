@@ -1,5 +1,5 @@
 loop_on_end = true
-pause_at_start = true
+pause_at_start = false
 
 [defaults]
 time_format = "%M:%S"

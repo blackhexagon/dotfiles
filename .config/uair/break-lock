@@ -31,7 +31,29 @@ playerctl --all-players pause 2>/dev/null || true
 # Run hyprlock in the foreground; it returns when the user authenticates.
 hyprlock --config "$HOME/.config/hypr/hyprlock-break.conf" --no-fade-in
 
-# User successfully unlocked. Resume the next work session (uair was
-# paused by the end-of-break hook). If uair is already resumed (e.g.
-# the user pre-pressed play somehow), this is a no-op.
-uairctl resume 2>/dev/null || true
+# User successfully unlocked. Two cases:
+#
+#   1. Break finished normally: the end-of-break hook already fired
+#      `uairctl pause`, advancing uair to the next (paused) work session.
+#      Here we just resume it.
+#
+#   2. User unlocked *early*, mid-break: uair is still counting down the
+#      break session. We don't want to resume the leftover break time —
+#      instead, skip the rest of the break and start the following work
+#      session immediately. `uairctl next` advances to that work session;
+#      because work sessions have `autostart = true`, it begins running.
+#
+# Detect the case by the current session's name. Break sessions are named
+# "Break" / "Long break"; work sessions are "Work N/4".
+current_name="$(uairctl fetch '{name}' 2>/dev/null || true)"
+
+case "$current_name" in
+*[Bb]reak*)
+  # Still mid-break — skip ahead to the next work session.
+  uairctl next 2>/dev/null || true
+  ;;
+*)
+  # Break already over; uair is paused on the next work session. Resume it.
+  uairctl resume 2>/dev/null || true
+  ;;
+esac
