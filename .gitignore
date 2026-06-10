@@ -1,6 +1,7 @@
-.config/tmux/*
+.config/tmux/plugins/*
 .config/github-copilot
 .config/astro
 .config/btop
 .config/nextjs-nodejs
 .config/nvim/lazy-lock.json
+.config/hypr/shaders

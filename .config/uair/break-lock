@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+# Launch the Pomodoro break lockscreen.
+#
+# Lifecycle:
+#   - End of work session: uair fires this script.
+#   - Break runs; the lockscreen shows the live countdown.
+#   - End of break: uair fires `uairctl pause` (in its session command),
+#     which loads the next work session in paused state. The lockscreen
+#     stays up, hint text swaps to "Break over — type password".
+#   - User authenticates → hyprlock exits → this script runs
+#     `uairctl resume` to start the next work session.
+#
+# Side effects:
+#   - Pauses all media players for the duration of the break.
+#   - Suppresses the omarchy screensaver so it does not race with hyprlock.
+#   - Resumes media after the lock dies.
+
+set -u
+
+# Don't double-spawn if a hyprlock is already running (e.g. system lock).
+if pidof -x hyprlock >/dev/null; then
+  exit 0
+fi
+
+# Stop the omarchy screensaver so it doesn't try to spawn behind us.
+pkill -f org.omarchy.screensaver 2>/dev/null || true
+
+# Pause any active media for the duration of the break.
+playerctl --all-players pause 2>/dev/null || true
+
+# Run hyprlock in the foreground; it returns when the user authenticates.
+hyprlock --config "$HOME/.config/hypr/hyprlock-break.conf" --no-fade-in
+
+# User successfully unlocked. Two cases:
+#
+#   1. Break finished normally: the end-of-break hook already fired
+#      `uairctl pause`, advancing uair to the next (paused) work session.
+#      Here we just resume it.
+#
+#   2. User unlocked *early*, mid-break: uair is still counting down the
+#      break session. We don't want to resume the leftover break time —
+#      instead, skip the rest of the break and start the following work
+#      session immediately. `uairctl next` advances to that work session;
+#      because work sessions have `autostart = true`, it begins running.
+#
+# Detect the case by the current session's name. Break sessions are named
+# "Break" / "Long break"; work sessions are "Work N/4".
+current_name="$(uairctl fetch '{name}' 2>/dev/null || true)"
+
+case "$current_name" in
+*[Bb]reak*)
+  # Still mid-break — skip ahead to the next work session.
+  uairctl next 2>/dev/null || true
+  ;;
+*)
+  # Break already over; uair is paused on the next work session. Resume it.
+  uairctl resume 2>/dev/null || true
+  ;;
+esac

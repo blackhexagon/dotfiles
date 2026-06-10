@@ -1,0 +1,56 @@
+loop_on_end = true
+pause_at_start = false
+
+[defaults]
+time_format = "%M:%S"
+paused_state_text = "paused"
+resumed_state_text = "resumed"
+autostart = true
+
+[[sessions]]
+id = "work1"
+name = "Work 1/4"
+duration = "25m"
+command = "$HOME/dotfiles/.config/uair/break-lock &"
+
+[[sessions]]
+id = "short1"
+name = "Break"
+duration = "5m"
+command = "uairctl pause"
+
+[[sessions]]
+id = "work2"
+name = "Work 2/4"
+duration = "25m"
+command = "$HOME/dotfiles/.config/uair/break-lock &"
+
+[[sessions]]
+id = "short2"
+name = "Break"
+duration = "5m"
+command = "uairctl pause"
+
+[[sessions]]
+id = "work3"
+name = "Work 3/4"
+duration = "25m"
+command = "$HOME/dotfiles/.config/uair/break-lock &"
+
+[[sessions]]
+id = "short3"
+name = "Break"
+duration = "5m"
+command = "uairctl pause"
+
+[[sessions]]
+id = "work4"
+name = "Work 4/4"
+duration = "25m"
+command = "$HOME/dotfiles/.config/uair/break-lock &"
+
+[[sessions]]
+id = "long"
+name = "Long break"
+duration = "15m"
+command = "uairctl pause"

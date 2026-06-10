@@ -1,0 +1,4 @@
+set ssl:verify-certificate no
+set ftp:passive-mode on
+
+alias bigdirs "du -h --max-depth=1 | sort -rn | head -n 10"

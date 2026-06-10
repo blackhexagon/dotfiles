@@ -1,0 +1,22 @@
+speed = 1.00
+
+provider = "radio"
+
+eq_preset = "Electronic"
+eq = [6, 4, 1, -1, -2, 1, 3, 4, 5, 6]
+theme = ""
+# Options: Bars, BarsDot, Rain, BarsOutline, Bricks, Columns, ClassicPeak, Wave, Scatter, Flame, Retro, Pulse, Matrix, Binary, Sakura, Firework, Bubbles, Logo, Terrain, Scope, Heartbeat, Butterfly, Ascii, Firefly, Mosaic, Sand, Geyser, None
+visualizer = "Sand"
+compact = true
+
+shuffle = true
+
+repeat = "Off"
+[plex]
+url   = "https://plex.trca.dev"
+token = "$PLEX_TOKEN"
+libraries = ["Hudba"]
+
+[ytmusic]
+client_id = "${YTMUSIC_CLIENT_ID}"
+client_secret = "${YTMUSIC_CLIENT_SECRET}"

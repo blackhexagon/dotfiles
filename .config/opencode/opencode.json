@@ -1,11 +1,63 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "theme": "catppuccin",
+  "autoupdate": false,
+  "permission": {
+    "external_directory": {
+      "~/Work/**": "allow"
+    }
+  },
+  "plugin": ["opencode-claude-auth", "opencode-wakatime"],
+  "provider": {
+    "anthropic": {}
+  },
   "mcp": {
-    "chrome-devtools": {
+    "anki-mcp": {
       "type": "local",
+      "enabled": false,
+      "command": ["npx", "-y", "@ankimcp/anki-mcp-server", "--stdio"],
+      "environment": {
+        "ANKI_CONNECT_URL": "http://localhost:8765"
+      }
+    },
+    "sentry": {
+      "type": "remote",
+      "url": "https://mcp.sentry.dev/mcp",
+      "oauth": {},
+      "enabled": false
+    },
+    "fakturoid": {
+      "type": "remote",
+      "url": "https://app.fakturoid.cz/mcp/v1",
+      "oauth": {},
+      "enabled": false
+    },
+    "figma": {
       "enabled": true,
-      "command": ["npx", "chrome-devtools-mcp@latest"]
+      "type": "remote",
+      "url": "https://mcp.figma.com/mcp",
+      "oauth": {
+        "clientId": "{env:FIGMA_CLIENT_ID}",
+        "clientSecret": "{env:FIGMA_CLIENT_SECRET}"
+      }
+    },
+    "next-devtools": {
+      "type": "local",
+      "enabled": false,
+      "command": ["npx", "-y", "next-devtools-mcp@latest"]
+    },
+    "garth-garmin-connect": {
+      "type": "local",
+      "command": ["uvx", "garth-mcp-server"],
+      "enabled": false,
+      "environment": {
+        "GARTH_TOKEN": "{env:GARTH_TOKEN}"
+      }
+    }
+  },
+  "formatter": {
+    "php-cs-fixer": {
+      "command": ["ddev", "exec", "vendor/bin/php-cs-fixer", "fix", "$FILE"],
+      "extensions": [".php"]
     }
   }
 }
