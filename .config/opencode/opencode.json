@@ -52,6 +52,15 @@
       "environment": {
         "GARTH_TOKEN": "{env:GARTH_TOKEN}"
       }
+    },
+    "chome-devtools": {
+      "type": "local",
+      "enabled": false,
+      "command": [
+        "npx",
+        "chrome-devtools-mcp@latest",
+        "--executablePath=/usr/bin/chromium"
+      ]
     }
   },
   "formatter": {
