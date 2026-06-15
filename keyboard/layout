@@ -48,6 +48,10 @@ xkb_symbols "u2b22" {
     key <SPCE>  { type[Group1]="EIGHT_LEVEL",
                   [     space,      space,   NoSymbol,   NoSymbol,     Escape,     Escape ]};
 
+    // --- Left Shift + / => question mark (Left Shift acts as Shift here) ---
+    key <AB10>  { type[Group1]="EIGHT_LEVEL",
+                  [     slash,   question,   NoSymbol,   NoSymbol,   question,   question ]};
+
     // --- Left Shift becomes the level-5 (nav) chooser; Right Shift stays normal Shift ---
     key <LFSH>  {[ ISO_Level5_Shift ], type[Group1]="ONE_LEVEL" };
     modifier_map Mod3 { <LFSH> };
