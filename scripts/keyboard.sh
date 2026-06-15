@@ -22,10 +22,12 @@ if [[ ! -f "$CUSTOM_LAYOUT" ]]; then
     exit 1
 fi
 
-# Copy custom layout to XKB symbols directory
+# Symlink custom layout into the XKB symbols directory.
+# The dotfile is the source of truth; editing it (no sudo needed) and
+# reloading Hyprland is enough to apply changes.
 echo "Installing custom keyboard layout..."
-cp "$CUSTOM_LAYOUT" "$TARGET_SYMBOLS"
-echo "  Copied layout to $TARGET_SYMBOLS"
+ln -sfn "$CUSTOM_LAYOUT" "$TARGET_SYMBOLS"
+echo "  Symlinked $TARGET_SYMBOLS -> $CUSTOM_LAYOUT"
 
 # Check if layout already exists in evdev.xml
 if grep -q "<name>$LAYOUT_NAME</name>" "$EVDEV_XML"; then

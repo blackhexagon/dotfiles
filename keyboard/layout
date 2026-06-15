@@ -8,9 +8,6 @@ xkb_symbols "u2b22" {
     key <AD04>  {[         r,          R,     rcaron,     Rcaron ]};
     key <AD05>  {[         t,          T,     tcaron,     Tcaron ]};
     key <AD06>  {[         z,          Z,     zcaron,     Zcaron ]};
-    key <AD07>  {[         u,          U,     uacute,     Uacute ]};
-    key <AD08>  {[         i,          I,     iacute,     Iacute ]};
-    key <AD09>  {[         o,          O,     oacute,     Oacute ]};
 
     key <AC01>  {[         a,          A,     aacute,     Aacute ]};
     key <AC02>  {[         s,          S,     scaron,     Scaron ]};
@@ -22,6 +19,34 @@ xkb_symbols "u2b22" {
     key <AB03>  {[         c,          C,     ccaron,     Ccaron ]};
     key <AB06>  {[         n,          N,     ncaron,     Ncaron ]};
 
+    // --- Left Shift + hjkl => arrow keys (level 5) ---
+    key <AC06>  { type[Group1]="EIGHT_LEVEL",
+                  [         h,          H,   NoSymbol,   NoSymbol,       Left,       Left ]};
+    key <AC07>  { type[Group1]="EIGHT_LEVEL",
+                  [         j,          J,   NoSymbol,   NoSymbol,       Down,       Down ]};
+    key <AC08>  { type[Group1]="EIGHT_LEVEL",
+                  [         k,          K,   NoSymbol,   NoSymbol,         Up,         Up ]};
+    key <AC09>  { type[Group1]="EIGHT_LEVEL",
+                  [         l,          L,   NoSymbol,   NoSymbol,      Right,      Right ]};
+
+    // --- Left Shift + uiop => Home/PageUp/PageDown/End (level 5), keep Czech accents at 3/4 ---
+    key <AD07>  { type[Group1]="EIGHT_LEVEL",
+                  [         u,          U,     uacute,     Uacute,       Home,       Home ]};
+    key <AD08>  { type[Group1]="EIGHT_LEVEL",
+                  [         i,          I,     iacute,     Iacute,      Prior,      Prior ]};
+    key <AD09>  { type[Group1]="EIGHT_LEVEL",
+                  [         o,          O,     oacute,     Oacute,       Next,       Next ]};
+    key <AD10>  { type[Group1]="EIGHT_LEVEL",
+                  [         p,          P,   NoSymbol,   NoSymbol,        End,        End ]};
+
+    // --- Left Shift becomes the level-5 (nav) chooser; Right Shift stays normal Shift ---
+    key <LFSH>  {[ ISO_Level5_Shift ], type[Group1]="ONE_LEVEL" };
+    modifier_map Mod3 { <LFSH> };
+
+    // --- Hold Left Shift, then tap Right Shift => Compose (Multi_key) ---
+    key <RTSH>  { type[Group1]="EIGHT_LEVEL",
+                  [   Shift_R,    Shift_R,   NoSymbol,   NoSymbol,  Multi_key,  Multi_key ]};
+    modifier_map Shift { <RTSH> };
+
     include "level3(ralt_switch)"
 };
-
