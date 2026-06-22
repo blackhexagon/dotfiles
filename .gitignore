@@ -7,3 +7,7 @@
 .config/hypr/shaders
 .config/gws
 .config/gcloud
+
+# In .ssh, only version config
+.ssh/*
+!.ssh/config
