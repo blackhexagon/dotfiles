@@ -29,7 +29,7 @@
     "next-devtools": {
       "type": "local",
       "command": ["npx", "-y", "next-devtools-mcp@latest"],
-      "enabled": false,
+      "enabled": false
     },
     "chome-devtools": {
       "type": "local",
@@ -37,9 +37,8 @@
         "npx",
         "chrome-devtools-mcp@latest",
         "--executablePath=/usr/bin/chromium"
-      ]
-      "command": ["npx", "-y", "next-devtools-mcp@latest"],
-      "enabled": false,
+      ],
+      "enabled": false
     }
   },
   "formatter": {
