@@ -5,3 +5,5 @@
 .config/nextjs-nodejs
 .config/nvim/lazy-lock.json
 .config/hypr/shaders
+.config/gws
+.config/gcloud
