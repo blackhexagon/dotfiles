@@ -1,10 +1,18 @@
 # If not running interactively, don't do anything (leave this at the top of this file)
 # [[ $- == *i* ]] && source -- /usr/share/blesh/ble.sh --attach=none
-[[ $- == *i* ]] && source /usr/share/blesh/ble.sh --noattach
+[ -f /etc/debian_version ] && IS_DEBIAN=1 || IS_DEBIAN=0
+
+if [ "$IS_DEBIAN" = 1 ]; then
+  source -- ~/.local/share/blesh/ble.sh
+else
+  [[ $- == *i* ]] && source /usr/share/blesh/ble.sh --noattach
+fi
 
 # All the default Omarchy aliases and functions
 # (don't mess with these directly, just overwrite them here!)
-source "$HOME/.local/share/omarchy/default/bash/rc"
+if [ "$IS_DEBIAN" != 1 ]; then
+  source "$HOME/.local/share/omarchy/default/bash/rc"
+fi
 
 source "$HOME/completion-for-pnpm.bash"
 source "$HOME/.env"
@@ -12,6 +20,9 @@ source "$HOME/bash/git.sh"
 source "$HOME/bash/tmux.sh"
 source "$HOME/bash/pwd.sh"
 
+if [ "$IS_DEBIAN" = 1 ]; then
+  export PATH="$HOME/.local/bin:$PATH"
+fi
 export PATH="$HOME/.opencode/bin:$HOME/.config/composer/vendor/bin:$HOME/.local/share/../bin/env:$PATH"
 export EDITOR="nvim"
 
@@ -57,5 +68,11 @@ fif() {
   fi
   rg --files-with-matches --no-messages "$1" | fzf --preview 'bat -pp --color=always {}' --preview-window '~3' | xargs $EDITOR
 }
+
+if [ "$IS_DEBIAN" = 1 ]; then
+  eval "$(zoxide init bash)"
+  eval "$(starship init bash)"
+  eval "$(mise activate bash)"
+fi
 
 [[ ! ${BLE_VERSION-} ]] || ble-attach
