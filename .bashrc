@@ -26,9 +26,13 @@ fi
 export PATH="$HOME/.opencode/bin:$HOME/.config/composer/vendor/bin:$HOME/.local/share/../bin/env:$PATH"
 export EDITOR="nvim"
 
+if [ "$IS_DEBIAN" = 1 ]; then
+  alias cat='batcat -pp'
+else
+  alias cat='bat -pp'
+fi
 alias vi="nvim ."
 alias ll='eza --long --header --git --icons --all --group-directories-first --time-style=relative'
-alias cat='bat -pp'
 alias scripts="cat package.json | jq --color-output '.scripts'"
 alias laptop-off='hyprctl keyword monitor eDP-1,disable,auto,auto'
 alias laptop-on='hyprctl keyword monitor eDP-1,preferred,auto,auto'
