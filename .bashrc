@@ -74,6 +74,7 @@ fif() {
 }
 
 if [ "$IS_DEBIAN" = 1 ]; then
+  export MISE_NODE_VERSION=22
   eval "$(zoxide init bash)"
   eval "$(starship init bash)"
   eval "$(mise activate bash)"
