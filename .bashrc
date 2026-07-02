@@ -65,6 +65,20 @@ killport() {
   fi
 }
 
+tunnel() {
+  # Get port from argument or prompt
+  local port=$1
+  if [ -z "$port" ]; then
+    read -p "Enter the port number to tunnel: " port
+  fi
+
+  # Optional host (defaults to "home")
+  local host=${2:-home}
+
+  echo "Tunneling localhost:$port -> $host:$port (Ctrl-C to stop)..."
+  ssh -N -L "$port:localhost:$port" "$host"
+}
+
 fif() {
   if [ ! "$#" -gt 0 ]; then
     echo "Need a string to search for!"
