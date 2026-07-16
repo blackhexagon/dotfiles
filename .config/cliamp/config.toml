@@ -9,7 +9,7 @@ theme = ""
 visualizer = "Sand"
 compact = true
 
-shuffle = true
+shuffle = false
 
 repeat = "Off"
 [plex]

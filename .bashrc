@@ -23,7 +23,7 @@ source "$HOME/bash/pwd.sh"
 if [ "$IS_DEBIAN" = 1 ]; then
   export PATH="$HOME/.local/bin:$PATH"
 fi
-export PATH="$HOME/.opencode/bin:$HOME/.config/composer/vendor/bin:$HOME/.local/share/../bin/env:$PATH"
+export PATH="$HOME/.opencode/bin:$HOME/.config/composer/vendor/bin:$HOME/.local/share/../bin/env::$PATH"
 export EDITOR="nvim"
 
 if [ "$IS_DEBIAN" = 1 ]; then
