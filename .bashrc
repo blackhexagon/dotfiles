@@ -19,6 +19,7 @@ source "$HOME/.env"
 source "$HOME/bash/git.sh"
 source "$HOME/bash/tmux.sh"
 source "$HOME/bash/pwd.sh"
+source "$HOME/bash/audio.sh"
 
 if [ "$IS_DEBIAN" = 1 ]; then
   export PATH="$HOME/.local/bin:$PATH"
