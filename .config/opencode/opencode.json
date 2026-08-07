@@ -11,6 +11,11 @@
     "anthropic": {}
   },
   "mcp": {
+    "resend": {
+      "type": "remote",
+      "url": "https://mcp.resend.com/mcp",
+      "enabled": false
+    },
     "sentry": {
       "type": "remote",
       "url": "https://mcp.sentry.dev/mcp",
