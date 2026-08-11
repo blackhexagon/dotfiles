@@ -44,6 +44,11 @@
         "--executablePath=/usr/bin/chromium"
       ],
       "enabled": false
+    },
+    "Neon": {
+      "type": "remote",
+      "url": "https://mcp.neon.tech/mcp",
+      "enabled": false
     }
   },
   "formatter": {
