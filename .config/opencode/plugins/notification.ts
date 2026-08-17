@@ -1,6 +1,6 @@
 import type { Plugin } from "@opencode-ai/plugin";
 
-export const NotificationPlugin = (async ({ $, project }) => {
+export const NotificationPlugin = (async ({ $, client, directory, project }) => {
   const projectName =
     project.worktree.split("/").filter(Boolean).at(-1) ?? project.id;
   const notify = async (glyph: string, status: string, detail?: string) => {
@@ -11,6 +11,12 @@ export const NotificationPlugin = (async ({ $, project }) => {
   return {
     event: async ({ event }) => {
       if (event.type === "session.idle") {
+        const { data: session } = await client.session.get({
+          path: { id: event.properties.sessionID },
+          query: { directory },
+        });
+        if (!session || session.parentID) return;
+
         await $`printf '\a'`;
         await notify("󰄬", "Finished");
       }
