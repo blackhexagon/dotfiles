@@ -2,6 +2,7 @@
 
 import json
 import os
+import struct
 import sys
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -79,6 +80,165 @@ def fetch_claude():
         return {"percent": percent, "reset_at": int(reset_at)}
     except ValueError as exc:
         raise RuntimeError("Claude response contains invalid usage headers") from exc
+
+
+def decode_varint(buffer, index):
+    shift = 0
+    value = 0
+    while index < len(buffer):
+        byte = buffer[index]
+        index += 1
+        value |= (byte & 0x7F) << shift
+        if not byte & 0x80:
+            return value, index
+        shift += 7
+    raise ValueError("truncated varint")
+
+
+def decode_fields(buffer):
+    index = 0
+    fields = []
+    while index < len(buffer):
+        key, index = decode_varint(buffer, index)
+        field = key >> 3
+        wire = key & 7
+        if wire == 0:
+            value, index = decode_varint(buffer, index)
+            fields.append((field, "varint", value))
+        elif wire == 1:
+            value = buffer[index : index + 8]
+            index += 8
+            fields.append((field, "i64", value))
+        elif wire == 2:
+            length, index = decode_varint(buffer, index)
+            value = buffer[index : index + length]
+            index += length
+            fields.append((field, "bytes", value))
+        elif wire == 5:
+            value = buffer[index : index + 4]
+            index += 4
+            fields.append((field, "i32", value))
+        else:
+            raise ValueError(f"unknown protobuf wire type {wire}")
+    return fields
+
+
+def decode_timestamp(buffer):
+    seconds = None
+    for field, kind, value in decode_fields(buffer):
+        if field == 1 and kind == "varint":
+            seconds = value
+    return seconds
+
+
+def decode_float(value):
+    if len(value) != 4:
+        raise ValueError("invalid float")
+    return struct.unpack("<f", value)[0]
+
+
+def grpc_web_payload(buffer):
+    index = 0
+    while index + 5 <= len(buffer):
+        flags = buffer[index]
+        length = struct.unpack(">I", buffer[index + 1 : index + 5])[0]
+        payload = buffer[index + 5 : index + 5 + length]
+        index += 5 + length
+        if flags & 0x80:
+            continue
+        return payload
+    raise ValueError("missing grpc-web data frame")
+
+
+def parse_grok_credits(buffer):
+    for field, kind, value in decode_fields(buffer):
+        if field == 1 and kind == "bytes":
+            return parse_grok_credits_config(value)
+    raise ValueError("missing credits config")
+
+
+def parse_grok_credits_config(buffer):
+    used = None
+    reset_at = None
+    for field, kind, value in decode_fields(buffer):
+        if field == 1 and kind == "i32" and used is None:
+            used = decode_float(value)
+        elif field == 7 and kind == "bytes":
+            product_used = parse_grok_product_usage(value)
+            if product_used is not None:
+                used = product_used
+        elif field == 8 and kind == "bytes":
+            period_reset = parse_grok_period_end(value)
+            if period_reset is not None:
+                reset_at = period_reset
+        elif field == 5 and kind == "bytes" and reset_at is None:
+            reset_at = decode_timestamp(value)
+    return used, reset_at
+
+
+def parse_grok_product_usage(buffer):
+    product = None
+    used = None
+    for field, kind, value in decode_fields(buffer):
+        if field == 1 and kind == "varint":
+            product = value
+        elif field == 2 and kind == "i32":
+            used = decode_float(value)
+    if product == 2:
+        return used
+    return None
+
+
+def parse_grok_period_end(buffer):
+    for field, kind, value in decode_fields(buffer):
+        if field == 3 and kind == "bytes":
+            return decode_timestamp(value)
+    return None
+
+
+def fetch_grok():
+    auth_path = (
+        Path(os.environ.get("XDG_DATA_HOME", str(Path.home() / ".local" / "share")))
+        / "opencode"
+        / "auth.json"
+    )
+    access_token = (read_json(auth_path).get("xai") or {}).get("access")
+    if not access_token:
+        raise RuntimeError(f"missing xAI access token in {auth_path}")
+
+    request = Request(
+        "https://grok.com/grok_api_v2.GrokBuildBilling/GetGrokCreditsConfig",
+        data=b"\x00\x00\x00\x00\x00",
+        headers={
+            "Authorization": f"Bearer {access_token}",
+            "Content-Type": "application/grpc-web+proto",
+            "Accept": "application/grpc-web+proto",
+            "X-Grpc-Web": "1",
+            "User-Agent": "tmux-agent-usage/1.0",
+        },
+        method="POST",
+    )
+
+    try:
+        with urlopen(request, timeout=15) as response:
+            payload = grpc_web_payload(response.read())
+    except HTTPError as exc:
+        raise RuntimeError(f"xAI credits API returned HTTP {exc.code}") from exc
+    except URLError as exc:
+        raise RuntimeError(f"xAI credits request failed: {exc.reason}") from exc
+    except ValueError as exc:
+        raise RuntimeError("xAI credits response is missing usage data") from exc
+
+    try:
+        used, reset_at = parse_grok_credits(payload)
+        if used is None or reset_at is None:
+            raise ValueError("missing SuperGrok usage")
+        percent = max(0, min(100, 100 - round(used)))
+        return {"percent": percent, "reset_at": int(reset_at)}
+    except (TypeError, ValueError) as exc:
+        raise RuntimeError(
+            "xAI credits response contains invalid usage values"
+        ) from exc
 
 
 def fetch_codex():
@@ -166,7 +326,7 @@ def format_duration(seconds):
 def load_usage():
     now = int(time.time())
     cache = read_cache()
-    fetchers = {"claude": fetch_claude, "codex": fetch_codex}
+    fetchers = {"claude": fetch_claude, "codex": fetch_codex, "grok": fetch_grok}
     pending = {}
     errors = []
 
@@ -209,7 +369,8 @@ def main():
     cache, errors = load_usage()
     claude = format_agent(cache.get("claude"), "✻", "#9a3f00")
     codex = format_agent(cache.get("codex"), ">_", "blue")
-    print(f"{claude} | {codex}")
+    grok = format_agent(cache.get("grok"), "∅", "#000")
+    print(f"{claude} | {codex} | {grok}")
     if errors:
         print("; ".join(errors), file=sys.stderr)
 
