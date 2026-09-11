@@ -11,6 +11,17 @@
     "anthropic": {}
   },
   "mcp": {
+    "dokploy-mcp": {
+      "type": "local",
+      "command": ["npx", "-y", "@dokploy/mcp@latest"],
+      "enabled": false,
+      "environment": {
+        "DOKPLOY_TOOL_PRESET": "deploy",
+        "DOKPLOY_ENABLED_TAGS": "postgres,redis,mariadb",
+        "DOKPLOY_URL": "https://dokploy.trca.dev",
+        "DOKPLOY_API_KEY": "{env:DOKPLOY_API_KEY}"
+      }
+    },
     "resend": {
       "type": "remote",
       "url": "https://mcp.resend.com/mcp",
