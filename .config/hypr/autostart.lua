@@ -1,0 +1,2 @@
+-- Extra startup applications. Omarchy starts its shell and services itself.
+-- o.launch_on_start("my-service")

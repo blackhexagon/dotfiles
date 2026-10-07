@@ -1,4 +1,4 @@
-include "%H/.local/share/omarchy/default/xcompose"
+include "%L"
 
 # Identification
 <Multi_key> <n> : "Matouš Trča"

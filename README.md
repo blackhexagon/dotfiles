@@ -2,6 +2,30 @@
 
 Automated setup for new computers with proper dependency management and error handling.
 
+## Omarchy Quatro
+
+Quatro uses `.config/hypr/*.lua` and `.config/omarchy/shell.json` for the desktop.
+Terminal and Neovim themes now come from `~/.local/state/omarchy/current/theme/`.
+The existing keybindings, centered-master layout, and 5/15-minute idle timings
+are preserved. Pomodoro integration is deferred.
+
+```bash
+# Install the custom keyboard before applying the Hyprland configuration
+./scripts/keyboard.sh --user
+
+# The existing Stow installer supports Omarchy and Debian/Ubuntu
+./scripts/dotfiles.sh --simulate
+./scripts/dotfiles.sh
+
+hyprctl reload
+hyprctl configerrors
+omarchy restart terminal
+```
+
+Stow reports existing configuration conflicts; back up and move conflicting
+target files before applying. `.XCompose` uses standard locale defaults so the
+personal sequences work on both platforms.
+
 ## Quick Start
 
 ### Automated Setup (Recommended)

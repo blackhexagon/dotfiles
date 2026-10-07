@@ -1,21 +1,25 @@
-# If not running interactively, don't do anything (leave this at the top of this file)
-# [[ $- == *i* ]] && source -- /usr/share/blesh/ble.sh --attach=none
+# Omarchy environment is also needed in non-interactive shells.
+[[ -r /usr/share/omarchy/default/bash/env-bootstrap ]] && source /usr/share/omarchy/default/bash/env-bootstrap
+
+# If not running interactively, don't do anything else
+[[ $- != *i* ]] && return
+
 [ -f /etc/debian_version ] && IS_DEBIAN=1 || IS_DEBIAN=0
 
 if [ "$IS_DEBIAN" = 1 ]; then
-  source -- ~/.local/share/blesh/ble.sh
+  [[ -r "$HOME/.local/share/blesh/ble.sh" ]] && source -- ~/.local/share/blesh/ble.sh
 else
-  [[ $- == *i* ]] && source /usr/share/blesh/ble.sh --noattach
+  [[ -r /usr/share/blesh/ble.sh ]] && source /usr/share/blesh/ble.sh --noattach
 fi
 
 # All the default Omarchy aliases and functions
 # (don't mess with these directly, just overwrite them here!)
 if [ "$IS_DEBIAN" != 1 ]; then
-  source "$HOME/.local/share/omarchy/default/bash/rc"
+  source "${OMARCHY_PATH:-/usr/share/omarchy}/default/bash/rc"
 fi
 
 source "$HOME/completion-for-pnpm.bash"
-source "$HOME/.env"
+[[ -r "$HOME/.env" ]] && source "$HOME/.env"
 source "$HOME/bash/git.sh"
 source "$HOME/bash/tmux.sh"
 source "$HOME/bash/pwd.sh"
@@ -35,8 +39,13 @@ fi
 alias vi="nvim ."
 alias ll='eza --long --header --git --icons --all --group-directories-first --time-style=relative'
 alias scripts="cat package.json | jq --color-output '.scripts'"
-alias laptop-off='hyprctl keyword monitor eDP-1,disable,auto,auto'
-alias laptop-on='hyprctl keyword monitor eDP-1,preferred,auto,auto'
+if [ "$IS_DEBIAN" = 1 ]; then
+  alias laptop-off='hyprctl keyword monitor eDP-1,disable,auto,auto'
+  alias laptop-on='hyprctl keyword monitor eDP-1,preferred,auto,auto'
+else
+  alias laptop-off='omarchy hyprland monitor internal off'
+  alias laptop-on='omarchy hyprland monitor internal on'
+fi
 alias grhh='git reset --hard'
 alias gsb='git status --short --branch'
 alias gcan!='git commit --verbose --all --no-edit --amend'

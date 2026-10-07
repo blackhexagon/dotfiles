@@ -4,7 +4,11 @@
 install_if_missing() {
     if ! command -v "$1" &>/dev/null; then
         echo "$1 not found. Installing..."
-        sudo apt update && sudo apt install -y "$2"
+        if command -v omarchy &>/dev/null; then
+            omarchy pkg add "$2" || exit 1
+        else
+            sudo apt update && sudo apt install -y "$2" || exit 1
+        fi
     else
         echo "$1 is already installed."
     fi
@@ -17,7 +21,7 @@ install_if_missing git git
 DOTFILES_DIR="$HOME/dotfiles"
 if [ ! -d "$DOTFILES_DIR" ]; then
     echo "Cloning dotfiles repository..."
-    git clone https://github.com/blackhexagon/dotfiles.git "$DOTFILES_DIR"
+    git clone https://github.com/blackhexagon/dotfiles.git "$DOTFILES_DIR" || exit 1
 else
     echo "Dotfiles repository already exists."
 fi
@@ -25,10 +29,11 @@ fi
 # Ensure Stow is installed
 install_if_missing stow stow
 
-# Stow the dotfiles
+# The repository is a single Stow package, including its hidden dotfiles.
 echo "Applying dotfiles with stow..."
-cd "$DOTFILES_DIR" || exit
-stow --target="$HOME" */
+stow --dir="$DOTFILES_DIR" --target="$HOME" --no-folding \
+    --ignore='^(\.git|\.gitignore|README\.md|scripts|keyboard|skills\.sh|wallpaper\.jpg|\.env\.example)$' \
+    "$@" . || exit 1
 
 echo "Dotfiles setup completed!"
 

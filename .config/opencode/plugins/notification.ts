@@ -5,7 +5,9 @@ export const NotificationPlugin = (async ({ $, client, directory, project }) => 
     project.worktree.split("/").filter(Boolean).at(-1) ?? project.id;
   const notify = async (glyph: string, status: string, detail?: string) => {
     const description = detail ? `${status}: ${detail}` : status;
-    await $`omarchy notification send ${glyph} ${projectName} ${description} -a OpenCode`;
+    await $`omarchy notification send -g ${glyph} --app-name OpenCode ${projectName} ${description}`
+      .quiet()
+      .nothrow();
   };
 
   return {
