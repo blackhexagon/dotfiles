@@ -32,3 +32,11 @@ audio-out() {
 
   wpctl set-default "$id" && echo "Default sink -> $name (node $id)"
 }
+
+# Convert any audio/video file(s) to mp3: mp3 file.m4a [...]
+mp3() {
+  local f
+  for f in "$@"; do
+    ffmpeg -hide_banner -loglevel error -i "$f" -vn -c:a libmp3lame -q:a 2 "${f%.*}.mp3" || return
+  done
+}
