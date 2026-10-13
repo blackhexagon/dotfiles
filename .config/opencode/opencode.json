@@ -1,65 +1,70 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "autoupdate": false,
-  "permission": {
-    "external_directory": {
-      "~/Work/**": "allow"
-    }
-  },
-  "plugin": ["opencode-claude-auth", "opencode-wakatime"],
-  "provider": {
-    "anthropic": {}
-  },
-  "mcp": {
-    "dokploy-mcp": {
-      "type": "local",
-      "command": ["npx", "-y", "@dokploy/mcp@latest"],
-      "enabled": false,
-      "environment": {
-        "DOKPLOY_TOOL_PRESET": "deploy",
-        "DOKPLOY_ENABLED_TAGS": "postgres,redis,mariadb",
-        "DOKPLOY_URL": "https://dokploy.trca.dev",
-        "DOKPLOY_API_KEY": "{env:DOKPLOY_API_KEY}"
+  "plugins": [
+    "opencode-wakatime",
+    {
+      "package": "@kimaki/plugin-fallback",
+      "options": {
+        "models": [
+          "anthropic/claude-opus-5-5",
+          "openai/gpt-6-sol#high",
+          "xai/grok-4.7"
+        ]
       }
-    },
-    "resend": {
-      "type": "remote",
-      "url": "https://mcp.resend.com/mcp",
-      "enabled": false
-    },
-    "sentry": {
-      "type": "remote",
-      "url": "https://mcp.sentry.dev/mcp",
-      "oauth": {},
-      "enabled": false
-    },
-    "figma": {
-      "type": "remote",
-      "url": "https://mcp.figma.com/mcp",
-      "oauth": {
-        "clientId": "{env:FIGMA_CLIENT_ID}",
-        "clientSecret": "{env:FIGMA_CLIENT_SECRET}"
+    }
+  ],
+  "mcp": {
+    "servers": {
+      "dokploy": {
+        "type": "local",
+        "command": ["npx", "-y", "@dokploy/mcp@latest"],
+        "disabled": true,
+        "environment": {
+          "DOKPLOY_TOOL_PRESET": "deploy",
+          "DOKPLOY_ENABLED_TAGS": "postgres,redis,mariadb",
+          "DOKPLOY_URL": "https://dokploy.trca.dev",
+          "DOKPLOY_API_KEY": "{env:DOKPLOY_API_KEY}"
+        }
       },
-      "enabled": false
-    },
-    "next-devtools": {
-      "type": "local",
-      "command": ["npx", "-y", "next-devtools-mcp@latest"],
-      "enabled": false
-    },
-    "chome-devtools": {
-      "type": "local",
-      "command": [
-        "npx",
-        "chrome-devtools-mcp@latest",
-        "--executablePath=/usr/bin/chromium"
-      ],
-      "enabled": false
-    },
-    "Neon": {
-      "type": "remote",
-      "url": "https://mcp.neon.tech/mcp",
-      "enabled": false
+      "resend": {
+        "type": "remote",
+        "url": "https://mcp.resend.com/mcp",
+        "disabled": true
+      },
+      "sentry": {
+        "type": "remote",
+        "url": "https://mcp.sentry.dev/mcp",
+        "oauth": {},
+        "disabled": true
+      },
+      "figma": {
+        "type": "remote",
+        "url": "https://mcp.figma.com/mcp",
+        "oauth": {
+          "client_id": "{env:FIGMA_CLIENT_ID}",
+          "client_secret": "{env:FIGMA_CLIENT_SECRET}"
+        },
+        "disabled": true
+      },
+      "next-devtools": {
+        "type": "local",
+        "command": ["npx", "-y", "next-devtools-mcp@latest"],
+        "disabled": true
+      },
+      "chome-devtools": {
+        "type": "local",
+        "command": [
+          "npx",
+          "chrome-devtools-mcp@latest",
+          "--executablePath=/usr/bin/chromium"
+        ],
+        "disabled": true
+      },
+      "neon": {
+        "type": "remote",
+        "url": "https://mcp.neon.tech/mcp",
+        "disabled": true
+      }
     }
   },
   "formatter": {
