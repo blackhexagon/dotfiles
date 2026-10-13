@@ -14,16 +14,11 @@ bind("SUPER + SHIFT + B", "Browser", { omarchy = "browser" })
 bind("SUPER + SHIFT + N", "Editor", { omarchy = "editor" })
 bind("SUPER + SHIFT + D", "Docker", { tui = "lazydocker" })
 bind("SUPER + SHIFT + O", "Obsidian", { launch = "obsidian", focus = "^obsidian$" })
--- Quatro default: Omawrite.
-bind("SUPER + SHIFT + W", "Typora", { launch = "typora --enable-wayland-ime" })
 
 -- Web apps. Lua strings preserve literal # characters in URLs.
--- Quatro defaults: HEY Calendar, HEY Mail, Music, ChatGPT, Signal, Google Maps.
 bind("SUPER + SHIFT + C", "Calendar", { webapp = "https://calendar.google.com/" })
 bind("SUPER + SHIFT + E", "Email", { webapp = "https://gmail.com" })
 bind("SUPER + SHIFT + M", "Plex", { webapp = "https://plex.trca.dev/web/index.html#!/", focus = true })
-bind("SUPER + SHIFT + A", "Gemini", { webapp = "https://gemini.google.com/app", focus = true })
-bind("SUPER + SHIFT + G", "Github", { webapp = "https://github.com/", focus = true })
 bind("SUPER + SHIFT + S", "Tasks", { webapp = "https://tasks.google.com/", focus = true })
 
 bind("SUPER + SHIFT + H", "Move window focus left", hl.dsp.focus({ direction = "l" }))
