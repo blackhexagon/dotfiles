@@ -10,3 +10,4 @@ claude = "latest"
 java = "temurin-20.0.2+9"
 codex = "latest"
 infisical = { version = "latest", asset_pattern = "cli_{{ version }}_{{ os(macos='darwin') }}_{{ arch(x64='amd64') }}.tar.gz" }
+lua = "latest"
