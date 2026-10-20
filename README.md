@@ -13,6 +13,9 @@ are preserved. Pomodoro integration is deferred.
 # Install the custom keyboard before applying the Hyprland configuration
 ./scripts/keyboard.sh --user
 
+# Terminal font used by foot
+./scripts/iosevka.sh
+
 # The existing Stow installer supports Omarchy and Debian/Ubuntu
 ./scripts/dotfiles.sh --simulate
 ./scripts/dotfiles.sh
@@ -72,6 +75,7 @@ The automated setup runs in these phases with proper dependency management:
 ### 2. Shell Configuration  
 - **zsh-plugins.sh** - Oh My Zsh plugins
 - **font.sh** - JetBrains Mono Nerd Font
+- **iosevka.sh** - IosevkaTerm Nerd Font (terminal font for foot)
 
 ### 3. Development Tools
 - **nvm.sh** - Node Version Manager
