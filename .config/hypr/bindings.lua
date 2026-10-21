@@ -30,3 +30,8 @@ bind("SUPER + SHIFT + CTRL + H", "Swap window left", hl.dsp.window.swap({ direct
 bind("SUPER + SHIFT + CTRL + L", "Swap window right", hl.dsp.window.swap({ direction = "r" }))
 bind("SUPER + SHIFT + CTRL + K", "Swap window up", hl.dsp.window.swap({ direction = "u" }))
 bind("SUPER + SHIFT + CTRL + J", "Swap window down", hl.dsp.window.swap({ direction = "d" }))
+
+-- Bar popups, same chord as calendar (SUPER + CTRL + ALT + D).
+bind("SUPER + CTRL + ALT + P", "Pomodoro", "omarchy-shell shell toggle techywilbur.pomodoro")
+bind("SUPER + CTRL + ALT + A", "Agenda", "omarchy-shell shell toggle io.github.alexinslc.calendar-agenda")
+bind("SUPER + CTRL + ALT + C", "Cliamp", "omarchy-shell shell toggle io.github.thisisgm.cliampui")
