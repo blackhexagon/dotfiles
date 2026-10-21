@@ -3,6 +3,7 @@
 #Global
 npx skills add googleworkspace/cli
 npx skills@latest add mattpocock/skills #https://www.aihero.dev/my-grill-me-skill-has-gone-viral & https://blog.master.dev/introducing-ai-skills-for-real-engineers/
+npx skills add https://github.com/ayghri/i-have-adhd --skill i-have-adhd
 
 #Project
 npx skills add nette/claude-code
