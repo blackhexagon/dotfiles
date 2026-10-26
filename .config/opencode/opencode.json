@@ -7,7 +7,7 @@
       "options": {
         "models": [
           "anthropic/claude-opus-5-5",
-          "openai/gpt-6-sol#high",
+          "openai/gpt-6.1-sol#high",
           "xai/grok-4.7"
         ]
       }
@@ -20,8 +20,7 @@
         "command": ["npx", "-y", "@dokploy/mcp@latest"],
         "disabled": true,
         "environment": {
-          "DOKPLOY_TOOL_PRESET": "deploy",
-          "DOKPLOY_ENABLED_TAGS": "postgres,redis,mariadb",
+          "DOKPLOY_ENABLED_TAGS": "project,environment,server,application,domain,deployment,postgres,redis,registry,vaultProvider",
           "DOKPLOY_URL": "https://dokploy.trca.dev",
           "DOKPLOY_API_KEY": "{env:DOKPLOY_API_KEY}"
         }

@@ -32,7 +32,7 @@ install_if_missing stow stow
 # The repository is a single Stow package, including its hidden dotfiles.
 echo "Applying dotfiles with stow..."
 stow --dir="$DOTFILES_DIR" --target="$HOME" --no-folding \
-    --ignore='^(\.git|\.gitignore|README\.md|scripts|keyboard|skills\.sh|wallpaper\.jpg|\.env\.example)$' \
+    --ignore='^(\.git|\.gitignore|README\.md|scripts|keyboard|omarchy|skills\.sh|wallpaper\.jpg|\.env\.example)$' \
     "$@" . || exit 1
 
 echo "Dotfiles setup completed!"

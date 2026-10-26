@@ -25,6 +25,10 @@
           "verticalFormat": "HH\n—\nmm"
         },
         {
+          "id": "u2b22.pomodoro",
+          "calendar": "Work"
+        },
+        {
           "id": "omarchy.weather"
         },
         {

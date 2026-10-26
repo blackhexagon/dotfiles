@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "u2b22.pomodoro",
+  "name": "Calendar Pomodoro",
+  "version": "0.1.0",
+  "author": "u2b22",
+  "license": "MIT",
+  "description": "Pomodoro countdown driven by one Google calendar: the bar counts down the block in progress, a click lists today's blocks, and a 5 or 15 minute gap between blocks shows a full-screen break screen.",
+  "kinds": [
+    "service",
+    "bar-widget"
+  ],
+  "entryPoints": {
+    "service": "Service.qml",
+    "barWidget": "BarWidget.qml"
+  },
+  "barWidget": {
+    "displayName": "Calendar Pomodoro",
+    "description": "Counts down the current block on the selected calendar",
+    "category": "Time",
+    "defaultSection": "center",
+    "allowMultiple": false,
+    "defaults": {
+      "calendar": "Work",
+      "skipPhrase": "jsemtakovejcurakzepotrebujupokracovatvpraci"
+    },
+    "schema": [
+      { "key": "calendar", "type": "string", "label": "Calendar name", "defaultValue": "Work", "description": "Display name of the Google calendar whose timed events are the pomodoros." },
+      { "key": "skipPhrase", "type": "string", "label": "Skip phrase", "defaultValue": "jsemtakovejcurakzepotrebujupokracovatvpraci", "description": "Typing this phrase is the only way to leave a break early. Case and spaces are ignored." }
+    ]
+  }
+}
