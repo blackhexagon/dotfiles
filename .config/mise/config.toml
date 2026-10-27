@@ -14,3 +14,4 @@ infisical = { version = "latest", asset_pattern = "cli_{{ version }}_{{ os(macos
 lua = "latest"
 opencode = { version = "latest", allow_builds = ["@opencode/cli"] }
 "npm:playwright" = "latest"
+gradle = "9.8.2"
