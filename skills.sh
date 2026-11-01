@@ -12,3 +12,4 @@ npx skills add GoogleChrome/modern-web-guidance
 npx skills add https://evilmartians.com/agent-skills --skill tailwind-best-practices
 npx skills add AminBlg/SimpleEnglish
 npx skills add Jakubantalik/transitions.dev # https://transitions.dev/skill.html
+npx skills add vercel/next.js

@@ -22,7 +22,8 @@
           "id": "omarchy.clock",
           "format": "dddd HH:mm",
           "formatAlt": "d MMMM 'W'ww yyyy",
-          "verticalFormat": "HH\n—\nmm"
+          "verticalFormat": "HH\n—\nmm",
+          "weekStartDay": "monday"
         },
         {
           "id": "u2b22.pomodoro",
