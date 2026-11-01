@@ -20,7 +20,7 @@
         "command": ["npx", "-y", "@dokploy/mcp@latest"],
         "disabled": true,
         "environment": {
-          "DOKPLOY_ENABLED_TAGS": "project,environment,server,application,domain,deployment,postgres,redis,registry,vaultProvider",
+          "DOKPLOY_ENABLED_TAGS": "project,environment,server,application,domain,deployment,postgres,redis,registry,vaultProvider,compose,backup,destination,volumeBackups",
           "DOKPLOY_URL": "https://dokploy.trca.dev",
           "DOKPLOY_API_KEY": "{env:DOKPLOY_API_KEY}"
         }
@@ -28,6 +28,11 @@
       "resend": {
         "type": "remote",
         "url": "https://mcp.resend.com/mcp",
+        "disabled": true
+      },
+      "frontend-checklist": {
+        "type": "remote",
+        "url": "https://mcp.frontendchecklist.io",
         "disabled": true
       },
       "sentry": {
