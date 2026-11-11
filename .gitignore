@@ -11,3 +11,4 @@
 !.ssh/config
 .config/lazygit
 .config/systemd
+.ruff_cache

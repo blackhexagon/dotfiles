@@ -1,14 +1,15 @@
 {
-  "version": 1,
-  "idle": {
-    "screensaver": 300,
-    "lock": 900
-  },
   "bar": {
-    "position": "top",
-    "transparent": false,
-    "centerAnchor": "omarchy.clock",
     "layout": {
+      "center": [
+        {
+          "id": "omarchy.clock",
+          "format": "HH:mm",
+          "formatAlt": "d MMMM 'W'ww yyyy",
+          "verticalFormat": "HH\n—\nmm",
+          "weekStartDay": "monday"
+        }
+      ],
       "left": [
         {
           "id": "omarchy.menu"
@@ -17,13 +18,65 @@
           "id": "omarchy.workspaces"
         }
       ],
-      "center": [
+      "right": [
         {
-          "id": "omarchy.clock",
-          "format": "dddd HH:mm",
-          "formatAlt": "d MMMM 'W'ww yyyy",
-          "verticalFormat": "HH\n—\nmm",
-          "weekStartDay": "monday"
+          "id": "omarchy.tray"
+        },
+        {
+          "id": "omarchy.bluetooth"
+        },
+        {
+          "id": "omarchy.tailscale"
+        },
+        {
+          "id": "meviusisback.hw-monitor",
+          "mode": "icons"
+        },
+        {
+          "id": "omarchy.network"
+        },
+        {
+          "id": "omarchy.audio"
+        },
+        {
+          "exec": "printf '󰍛\\n'",
+          "id": "u2b22.activity",
+          "interval": 3600,
+          "onClick": "omarchy launch or focus tui btop",
+          "onRightClick": "omarchy launch terminal",
+          "tooltip": "Activity (btop)",
+          "type": "command"
+        },
+        {
+          "id": "omarchy.power"
+        }
+      ],
+      "centerBegin": [],
+      "centerEnd": [
+        {
+          "id": "omarchy.elsewhen",
+          "cities": [
+            {
+              "name": "Prague",
+              "zone": "Europe/Prague"
+            },
+            {
+              "name": "Dubai",
+              "zone": "Asia/Dubai"
+            },
+            {
+              "name": "Tokyo",
+              "zone": "Asia/Tokyo"
+            },
+            {
+              "name": "Los Angeles",
+              "zone": "America/Los_Angeles"
+            },
+            {
+              "name": "New York",
+              "zone": "America/New_York"
+            }
+          ]
         },
         {
           "id": "u2b22.pomodoro",
@@ -33,39 +86,24 @@
           "id": "omarchy.weather"
         },
         {
+          "id": "io.github.thisisgm.cliampui"
+        },
+        {
           "id": "omarchy.system-update"
         },
         {
           "id": "omarchy.indicators"
         }
       ],
-      "right": [
-        {
-          "id": "omarchy.bluetooth"
-        },
-        {
-          "id": "omarchy.tray"
-        },
-        {
-          "id": "omarchy.network"
-        },
-        {
-          "id": "omarchy.audio"
-        },
-        {
-          "id": "u2b22.activity",
-          "type": "command",
-          "exec": "printf '󰍛\\n'",
-          "interval": 3600,
-          "tooltip": "Activity (btop)",
-          "onClick": "omarchy launch or focus tui btop",
-          "onRightClick": "omarchy launch terminal"
-        },
-        {
-          "id": "omarchy.power"
-        }
-      ]
-    }
+      "tray": []
+    },
+    "position": "top",
+    "transparent": false
   },
-  "plugins": []
+  "idle": {
+    "lock": 900,
+    "screensaver": 300
+  },
+  "plugins": [],
+  "version": 1
 }
