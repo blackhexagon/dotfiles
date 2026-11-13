@@ -1,0 +1,2 @@
+# pnpm <11 reads global settings from this ini file (pnpm 11+ uses config.yaml)
+minimum-release-age=10080

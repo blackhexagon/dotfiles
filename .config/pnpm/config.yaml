@@ -1,0 +1,2 @@
+# Supply-chain cooldown: only resolve versions published 7+ days ago (minutes)
+minimumReleaseAge: 10080
