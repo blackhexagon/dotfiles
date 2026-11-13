@@ -20,7 +20,9 @@
         "url": "https://umami.trca.dev/mcp",
         "oauth": false,
         "disabled": true,
-        "headers": { "Authorization": "Bearer {env:UMAMI_API_KEY}" }
+        "headers": {
+          "Authorization": "Bearer {env:UMAMI_API_KEY}"
+        }
       },
       "dokploy": {
         "type": "local",
@@ -75,6 +77,17 @@
         "type": "remote",
         "url": "https://mcp.neon.tech/mcp",
         "disabled": true
+      },
+      "aws": {
+        "type": "local",
+        "disabled": true,
+        "command": [
+          "uvx",
+          "mcp-proxy-for-aws@latest",
+          "https://aws-mcp.us-east-1.api.aws/mcp",
+          "--metadata",
+          "INSTALL_SOURCE=aws-cli"
+        ]
       }
     }
   },
