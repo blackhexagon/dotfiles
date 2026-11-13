@@ -11,10 +11,10 @@
 [core]
 	editor = nvim
 	excludesfile = ~/.gitignore_global
-	pager = delta
+	pager = hunk pager
 [delta]
   navigate = true
-  light = true
+  light = false
 [merge]
   conflictstyle = diff3
 [diff]

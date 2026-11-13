@@ -9,7 +9,7 @@ npx skills add https://github.com/ayghri/i-have-adhd --skill i-have-adhd
 npx skills add nette/claude-code
 npx skills add stolinski/s-stack --skill html
 npx skills add GoogleChrome/modern-web-guidance
-npx skills add https://evilmartians.com/agent-skills --skill tailwind-best-practices
+npx skills add https://evilmartians.com --skill tailwind-best-practices
 npx skills add AminBlg/SimpleEnglish
 npx skills add Jakubantalik/transitions.dev # https://transitions.dev/skill.html
 npx skills add vercel/next.js

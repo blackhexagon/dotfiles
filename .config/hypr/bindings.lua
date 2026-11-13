@@ -34,3 +34,10 @@ bind("SUPER + SHIFT + CTRL + J", "Swap window down", hl.dsp.window.swap({ direct
 -- Bar popups, same chord as calendar (SUPER + CTRL + ALT + D).
 bind("SUPER + CTRL + ALT + A", "Pomodoro", "omarchy-shell shell toggle u2b22.pomodoro")
 bind("SUPER + CTRL + ALT + C", "Cliamp", "omarchy-shell shell toggle io.github.thisisgm.cliampui")
+
+-- Dictation keys from before Alt + Space and Right Alt became the defaults.
+-- Remove these lines to give the keys back to applications.
+if o.dictation_installed and o.dictation_installed() then
+  o.bind("SUPER + CTRL + X", "Toggle dictation", "omarchy-dictation toggle")
+  o.bind_hold("F9", "Start dictation (push-to-talk)", "omarchy-dictation start", "Stop dictation (push-to-talk)", "omarchy-dictation stop")
+end

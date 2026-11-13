@@ -15,6 +15,13 @@
   ],
   "mcp": {
     "servers": {
+      "umami": {
+        "type": "remote",
+        "url": "https://umami.trca.dev/mcp",
+        "oauth": false,
+        "disabled": true,
+        "headers": { "Authorization": "Bearer {env:UMAMI_API_KEY}" }
+      },
       "dokploy": {
         "type": "local",
         "command": ["npx", "-y", "@dokploy/mcp@latest"],
