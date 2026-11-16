@@ -1,6 +1,6 @@
 return {
   "nickjvandyke/opencode.nvim",
-  version = "*", -- Latest stable release
+  -- No `version`: track `main`, which supports OpenCode v2 (latest stable release only supports v1)
   dependencies = {
     {
       -- `snacks.nvim` integration is recommended, but optional
@@ -11,8 +11,14 @@ return {
         input = {}, -- Enhances `ask()`
         picker = { -- Enhances `select()`
           actions = {
-            opencode_send = function(...)
-              return require("opencode").snacks_picker_send(...)
+            opencode_send = function(picker) ---@param picker snacks.Picker
+              local items = vim.tbl_map(function(item) ---@param item snacks.picker.Item
+                return item.file
+                    and require("opencode").format({ path = item.file, from = item.pos, to = item.end_pos })
+                  or item.text
+              end, picker:selected({ fallback = true }))
+
+              require("opencode").prompt(table.concat(items, ", ") .. " ")
             end,
           },
           win = {
@@ -43,18 +49,11 @@ return {
     end, { desc = "Execute opencode action…" })
 
     vim.keymap.set({ "n", "x" }, "go", function()
-      return require("opencode").operator("@this ")
-    end, { desc = "Add range to opencode", expr = true })
+      return require("opencode").operator("@this")
+    end, { desc = "Send range to opencode", expr = true })
     vim.keymap.set("n", "goo", function()
-      return require("opencode").operator("@this ") .. "_"
-    end, { desc = "Add line to opencode", expr = true })
-
-    vim.keymap.set("n", "<S-C-u>", function()
-      require("opencode").command("session.half.page.up")
-    end, { desc = "Scroll opencode up" })
-    vim.keymap.set("n", "<S-C-d>", function()
-      require("opencode").command("session.half.page.down")
-    end, { desc = "Scroll opencode down" })
+      return require("opencode").operator("@this") .. "_"
+    end, { desc = "Send line to opencode", expr = true })
 
     -- You may want these if you use the opinionated `<C-a>` and `<C-x>` keymaps above — otherwise consider `<leader>o…` (and remove terminal mode from the `toggle` keymap)
     vim.keymap.set("n", "+", "<C-a>", { desc = "Increment under cursor", noremap = true })
