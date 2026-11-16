@@ -36,7 +36,14 @@ if [ "$IS_DEBIAN" = 1 ]; then
 else
   alias cat='bat -pp'
 fi
-alias vi="nvim ."
+unalias vi 2>/dev/null
+vi() {
+  if [ $# -eq 0 ]; then
+    nvim .
+  else
+    nvim "$@"
+  fi
+}
 alias ll='eza --long --header --git --icons --all --group-directories-first --time-style=relative'
 alias scripts="cat package.json | jq --color-output '.scripts'"
 if [ "$IS_DEBIAN" = 1 ]; then
