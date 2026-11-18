@@ -97,6 +97,10 @@
     "lock": 900,
     "screensaver": 300
   },
-  "plugins": [],
+  "plugins": [
+    {
+      "id": "io.voxtype.settings"
+    }
+  ],
   "version": 1
 }
