@@ -9,15 +9,6 @@ Terminal and Neovim themes now come from `~/.local/state/omarchy/current/theme/`
 The existing keybindings, centered-master layout, and 5/15-minute idle timings
 are preserved.
 
-The bar's pomodoro is a custom plugin, `omarchy/plugins/u2b22.pomodoro/`. It
-counts down the timed events on the `Work` Google calendar. Omarchy refuses
-symlinked plugins, so it is copied rather than stowed. After installing, click
-the widget and choose Connect Google once.
-
-```bash
-./scripts/install-pomodoro-plugin.sh
-```
-
 ```bash
 # Install the custom keyboard before applying the Hyprland configuration
 ./scripts/keyboard.sh --user
