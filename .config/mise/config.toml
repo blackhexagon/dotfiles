@@ -1,5 +1,6 @@
 [tools]
-python = "latest"
+# PyGObject: the Omarchy shell runs plugin backends (e.g. Hertz Radio's MPRIS) with this Python.
+python = { version = "latest", postinstall = "python -m pip install --quiet PyGObject" }
 php = "latest"
 pnpm = "latest"
 bun = "latest"

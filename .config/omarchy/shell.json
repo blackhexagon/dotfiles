@@ -4,10 +4,14 @@
       "center": [
         {
           "id": "omarchy.clock",
-          "format": "HH:mm",
+          "format": "ddd d MMM HH:mm",
           "formatAlt": "d MMMM 'W'ww yyyy",
           "verticalFormat": "HH\n—\nmm",
           "weekStartDay": "monday"
+        },
+        {
+          "id": "aronnax.anki-status",
+          "barMetric": "Due cards"
         }
       ],
       "left": [
@@ -16,6 +20,9 @@
         },
         {
           "id": "omarchy.workspaces"
+        },
+        {
+          "id": "io.github.pixdevsapps.hertz-radio"
         }
       ],
       "right": [
@@ -51,7 +58,11 @@
           "id": "omarchy.power"
         }
       ],
-      "centerBegin": [],
+      "centerBegin": [
+        {
+          "id": "techywilbur.pomodoro"
+        }
+      ],
       "centerEnd": [
         {
           "id": "omarchy.elsewhen",
@@ -82,6 +93,9 @@
           "id": "omarchy.weather"
         },
         {
+          "id": "omarchy.agents"
+        },
+        {
           "id": "omarchy.system-update"
         },
         {
@@ -100,6 +114,9 @@
   "plugins": [
     {
       "id": "io.voxtype.settings"
+    },
+    {
+      "id": "io.github.expri-commits.anki-theme"
     }
   ],
   "version": 1

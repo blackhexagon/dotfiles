@@ -21,6 +21,10 @@ bind("SUPER + SHIFT + E", "Email", { webapp = "https://gmail.com" })
 bind("SUPER + SHIFT + M", "Plex", { webapp = "https://plex.trca.dev/web/index.html#!/", focus = true })
 bind("SUPER + SHIFT + S", "Tasks", { webapp = "https://tasks.google.com/", focus = true })
 
+-- Replaces the default SUPER + CTRL + ALT + R (Show reminders).
+bind("SUPER + CTRL + ALT + R", "Hertz Radio", "omarchy-shell hertz-radio toggle")
+bind("SUPER + CTRL + ALT + SHIFT + R", "Copy playing radio track", "~/.config/hypr/scripts/hertz-copy-track")
+
 bind("SUPER + SHIFT + H", "Move window focus left", hl.dsp.focus({ direction = "l" }))
 bind("SUPER + SHIFT + L", "Move window focus right", hl.dsp.focus({ direction = "r" }))
 bind("SUPER + SHIFT + K", "Move window focus up", hl.dsp.focus({ direction = "u" }))

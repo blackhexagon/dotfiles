@@ -17,6 +17,9 @@ are preserved.
 ./scripts/dotfiles.sh --simulate
 ./scripts/dotfiles.sh
 
+# Install the shell plugins; shell.json places them in the bar
+./scripts/omarchy-plugins.sh
+
 hyprctl reload
 hyprctl configerrors
 omarchy restart terminal

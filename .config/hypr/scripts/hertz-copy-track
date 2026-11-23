@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+# Copy the track Hertz Radio is playing ("Artist - Title") to the clipboard.
+# Reads the plugin's MPRIS metadata, so the plugin itself stays untouched.
+set -euo pipefail
+
+notify() {
+  # Stream titles are untrusted: escape markup before the notification renders it.
+  local body=${2//&/&amp;}
+  body=${body//</&lt;}
+  body=${body//>/&gt;}
+  notify-send -a "Hertz Radio" -i audio-x-generic "$1" "$body"
+}
+
+if ! meta=$(busctl --user -j get-property org.mpris.MediaPlayer2.hertzradio /org/mpris/MediaPlayer2 \
+  org.mpris.MediaPlayer2.Player Metadata 2>/dev/null); then
+  notify "Hertz Radio neběží" ""
+  exit 1
+fi
+
+# Without track info the plugin puts the station name into the title.
+track=$(jq -r '
+  .data as $m
+  | ($m["xesam:title"].data // "") as $title
+  | ($m["xesam:album"].data // "") as $station
+  | (($m["xesam:artist"].data // []) | join(", ")) as $artist
+  | if $title == "" or ($artist == "" and $title == $station) then ""
+    elif $artist == "" then $title
+    else "\($artist) - \($title)" end
+' <<<"$meta")
+
+if [[ -z $track ]]; then
+  notify "Žádný track ke zkopírování" "Stanice neposílá informace o skladbě."
+  exit 1
+fi
+
+printf '%s' "$track" | wl-copy
+notify "Zkopírováno" "$track"
